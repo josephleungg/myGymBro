@@ -1,3 +1,14 @@
-# myGymBro
+<h1 align="center">
+  myGymBro
+</h1>
 
-A mobile app for a fitness tracker created using React Native
+<p>A mobile application used to track, create, and reach your fitness goals. </p>
+
+# Features
+
+## Implemented
+
+## Work in progress
+
+- Login/Signup
+-
