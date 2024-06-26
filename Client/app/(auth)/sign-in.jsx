@@ -1,14 +1,70 @@
 import { View, Text, SafeAreaView, ScrollView, Image } from 'react-native'
 import images from '../../helper/images.js'
-import React from 'react'
+import FormField from '../../components/formfield.jsx'
+import CustomButton from '../../components/custombutton.jsx'
+import React, { useState } from 'react'
+import { Link } from 'expo-router'
 
 export default function SignIn() {
+  const [form, setForm] = useState({email: "", password: ""})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const submit = () => {
+    return
+  }
+
   return (
 
     <SafeAreaView className="bg-primary h-full">
 
-        <View className="w-full justify-center min-h-[85vh] px-4 my-6">
-          <Text className="color-white">Sign In</Text>
+        <View className="w-full min-h-[85vh] justify-center px-8 my-6">
+          
+          {/* View containing the login textbox and text */}
+          <View className="w-full">
+            <Text className="color-white text-xl font-semibold mb-6">Log In</Text>
+
+            {/* email box */}
+            <FormField 
+              title="Email"
+              value={form.email}
+              handleChangeText={(e) => setForm({...form, email: e})}
+              otherStyles="mt-7"
+              keyboardType="email-address"
+            />
+
+            {/* password box */}
+            <FormField 
+              title="Password"
+              value={form.password}
+              handleChangeText={(e) => setForm({...form, password: e})}
+              otherStyles="mt-7"
+            />
+
+            {/* log in button */}
+            <CustomButton 
+              title="Log In"
+              handlePress={submit}
+              containerStyles="mt-7"
+              isLoading={isSubmitting}
+            />
+
+            {/* sign up for an account text */}
+            <View className="justify-center pt-5 flex-row gap-2">
+              <Link href='/sign-up' className="text-md text-gray-100 font-pregular">Don't have an account?</Link>
+            </View>
+
+          </View>
+
+          {/* View containing logo */}
+          <View className="w-full items-center mt-28">
+            <Image 
+              source={images.transBGLogo} 
+              className='w-[64px] h-[64px]'
+              resizeMode='contain'
+            />
+          </View>
+          
+          
         </View>
 
     </SafeAreaView>

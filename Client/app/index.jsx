@@ -17,7 +17,7 @@ export default function App() {
 
           {/* App Logo and slogan */}
           <View className="items-center">
-            <Text className='font-psemibold text-lg color-white mt-10'>my<Text className='color-secondary'>GymBro</Text></Text>
+            <Text className='font-psemibold text-lg color-white mt-16'>my<Text className='color-secondary'>GymBro</Text></Text>
             <Image 
               source={images.transBGLogo} 
               className='w-[128px] h-[128px]'
