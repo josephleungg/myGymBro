@@ -21,7 +21,8 @@ const UsersSchema = mongoose.Schema({
         weight: { type: Number, default: 0 },
         height: { type: Number, default: 0 },
         bodyFat: { type: Number, default: 0 },
-        daysAtGym: { type: Number, default: 0 },
+        daysAtGym: { type: Array, default: [] },
+        progressPics: { type: Array, default: [] },
     },
     dateCreated: {
         type: Date,
