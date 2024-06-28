@@ -33,20 +33,25 @@ app.post('/signup', async (req, res) => {
         const user = await User.create(req.body);
         res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({'message': error.code})
-        // let errorMessages = { username: '', email: '', password: '' }
-        // // checking what the error is and returning the message to the user
-        // if(error.message.includes('User validation failed:')){
-        //     Object.values(error.errors).forEach(error => {
-        //         errorMessages[error.path] = error.properties.message;
-        //     });
+
+        // checking for empty required fields
+        if(error.message.includes('User validation failed:')){
+            let errorMessages = { username: '', email: '', password: '' };
+
+            Object.values(error.errors).forEach(error => {
+                errorMessages[error.path] = error.properties.message;
+            });
         
-        //     res.status(500).json(errorMessages)
-        // }else if(){
-            
-        // }else{
-        //     res.status(500).json({'message': 'An error has occured, please try again'})
-        // }
+            res.status(500).json(errorMessages)
+
+        // error checking for duplicate username and email
+        }else if(error.code === 11000){
+            res.status(500).json({'message': 'Username or email already exists'})
+
+        // error checking for any other error
+        }else{
+            res.status(500).json({'message': 'An error has occured, please try again'})
+        }
     }
 
 });
