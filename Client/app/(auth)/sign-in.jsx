@@ -3,14 +3,37 @@ import images from '../../helper/images.js'
 import FormField from '../../components/formfield.jsx'
 import CustomButton from '../../components/custombutton.jsx'
 import React, { useState } from 'react'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 
 export default function SignIn() {
   const [form, setForm] = useState({email: "", password: ""})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const submit = () => {
-    return
+  const submit = async () => {
+    // try and catching fetch request for signup
+    try{
+      const res = await fetch('http://192.168.2.32:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(form)
+      });
+
+      // checking if there are any errors to be thrown
+      if(res.status !== 200){
+        const errorResponse = await res.json();
+        throw new Error(errorResponse.message)
+      }
+
+      console.log('User logged in successfully')
+      setIsSubmitting(true);
+      router.replace('/home')
+    }catch(e){
+      console.log('Error:', e)
+      Alert.alert('Error:', e.message)
+      setIsSubmitting(false);
+    }
   }
 
   return (

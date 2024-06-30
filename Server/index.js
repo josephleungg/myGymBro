@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import User from './models/users.model.js'
 import updateUsers from './helper/updateSchemas.js'
 import cookieParser from 'cookie-parser'
+import jwt from 'jsonwebtoken'
 
 // connecting to the database
 mongoose.connect('mongodb+srv://admin:k5H4dusEVAZXTy9O@mygymbro.dzpouaw.mongodb.net/myGymBro?retryWrites=true&w=majority&appName=myGymBro')
@@ -15,6 +16,13 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
+
+const maxLoginTime = 2592000000; // time for expiry of Token
+
+// create a JWT function
+function createToken(id) {
+    return jwt.sign({ id }, 'myGymBrosecretkey', { expiresIn: maxLoginTime });
+}
 
 // UPDATING SCHEMAS
 // Update Schemas API, MUST CHANGE THE FUNCTION EVERYTIME YOU CHANGE ANYTHING ELSE TO IT
@@ -33,7 +41,11 @@ app.post('/signup', async (req, res) => {
     
     try {
         const user = await User.create(req.body);
-        res.status(200).json(user);
+        const token = createToken(user._id);
+
+        // create jwt cookie to instantly login the user
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxLoginTime });
+        res.status(200).json({ user: user._id });
     } catch (error) {
 
         // checking for empty required fields
@@ -67,17 +79,56 @@ app.post('/signup', async (req, res) => {
 
 });
 
-// Cookies
-app.get('/set_cookies', (req, res) => {
-    res.cookie('user', true, { maxAge: 2592000000, httpOnly: true }); // 30 days in milliseconds
-    res.send('you got the cookies');
+// api call for login
+app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.login(email, password);
+        const token = createToken(user._id);
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxLoginTime });
+        res.status(200).json({ user: user._id });
+        console.log('User logged in successfully')
+    }catch(e){
+        res.status(400).json({ 'message': e.message })
+        console.log(e.message)
+    }
 });
 
-// API to get cookies
+// Reset Cookies
+app.get('/clear_cookies', (req, res) => {
+    if (req.cookies) {
+        Object.keys(req.cookies).forEach(cookieName => {
+            res.clearCookie(cookieName);
+        });
+        res.json('All cookies cleared');
+    } else {
+        res.json('No cookies to clear');
+    }
+});
+
+// get cookies for testing
 app.get('/get_cookies', (req, res) => {
-    const cookies = req.cookies;
-    console.log(cookies.user)
-    res.json(cookies);
+    res.json(req.cookies);
+});
+
+// verifying jwt
+app.get('/verifyjwt', (req, res) => {
+    const token = req.cookies.jwt;
+    if(token){
+        jwt.verify(token, 'myGymBrosecretkey', (err, decodedToken) => {
+            if(err){
+                console.log('jwt is invalid')
+                res.status(400).json({ 'message': 'jwt is invalid' });
+            }else{
+                console.log('id: ' + decodedToken.id)
+                res.status(200).json({ id: decodedToken.id });
+            }
+        });
+    }else{
+        console.log('tried to verify jwt but user is not authenticated')
+        res.status(400).json({ 'message': 'not authenticated' });
+    }
 });
 
 app.listen(5000, () => {

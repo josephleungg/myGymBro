@@ -36,16 +36,25 @@ const UsersSchema = mongoose.Schema({
     }
 });
 
-UsersSchema.post('save', function (doc, next){
-    console.log('New user was created and saved', doc);
-    next();
-});
-
+// hash password before saving to db
 UsersSchema.pre('save', async function (next){
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
     next();
 });
+
+// method to login user
+UsersSchema.statics.login = async function(email, password){
+    const user = await this.findOne({ email: email });
+    if(user){
+        const auth = await bcrypt.compare(password, user.password);
+        if(auth){
+            return user;
+        }
+        throw Error('password is incorrect');
+    }
+    throw Error(`email doesn't exist`);
+}
 
 const User = mongoose.model('User', UsersSchema);
 

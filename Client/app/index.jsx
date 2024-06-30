@@ -5,8 +5,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Redirect, router } from 'expo-router';
 import images from '../helper/images.js'
 import CustomButton from '../components/custombutton.jsx'
+import { useGlobalContext } from '../context/GlobalProvider.js';
 
 export default function App() {
+  const { isLoading, isLoggedIn } = useGlobalContext();
+
+  // if user is logged in with verifiable jwt, redirect to home page
+  if(!isLoading && isLoggedIn){
+    return <Redirect href='/home'/>
+  }
 
   return (
     

@@ -1,9 +1,11 @@
-import { View, Text } from 'react-native'
+import { View, Text, Button } from 'react-native'
+import { router } from 'expo-router'
 import React from 'react'
 
 export default function Home () {
+
   return (
-    <View>
+    <View className="items-center justify-center h-full">
       <Text>home</Text>
     </View>
   )
