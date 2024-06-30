@@ -8,6 +8,12 @@ export default function GlobalProvider({ children }) {
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    // user data states
+    const [ username, setUsername ] = useState('');
+    const [ email, setEmail ] = useState('');
+    const [ properties, setProperties ] = useState({});
+    const [ dateCreated, setDateCreated ] = useState({});
+
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -24,6 +30,32 @@ export default function GlobalProvider({ children }) {
 
                 // if user JWT is recognized then grab the user id and set it in globalprovider
                 const userID = await res.json();
+                
+                // if jwt is verified then grab user data
+                try{
+                    const res = await fetch('http://192.168.2.32:5000/get_user_data?id='+userID.id, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                    const data = await res.json()
+            
+                    setUsername(data.username)
+                    setEmail(data.email)
+                    setProperties(data.properties)
+                    
+                    // getting year and month created
+                    const dateObject = new Date(data.dateCreated)
+                    const year = dateObject.getFullYear()
+                    const month = dateObject.getMonth() + 1
+                    setDateCreated({"year": year.toString(), "month": month.toString(), "fullDateTime": data.dateCreated})
+    
+                    console.log('User data fetched successfully')
+                }catch(e){
+                    console.log('Error:', e)
+                }
+
                 setIsLoggedIn(true);
                 setUser(userID.id);
             }catch(e){
@@ -45,7 +77,15 @@ export default function GlobalProvider({ children }) {
                 setIsLoggedIn,
                 user,
                 setUser,
-                isLoading
+                isLoading,
+                username,
+                setUsername,
+                email,
+                setEmail,
+                properties,
+                setProperties,
+                dateCreated,
+                setDateCreated
             }}
         >
             { children }

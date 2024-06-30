@@ -107,11 +107,6 @@ app.get('/clear_cookies', (req, res) => {
     }
 });
 
-// get cookies for testing
-app.get('/get_cookies', (req, res) => {
-    res.json(req.cookies);
-});
-
 // verifying jwt
 app.get('/verifyjwt', (req, res) => {
     const token = req.cookies.jwt;
@@ -128,6 +123,27 @@ app.get('/verifyjwt', (req, res) => {
     }else{
         console.log('tried to verify jwt but user is not authenticated')
         res.status(400).json({ 'message': 'not authenticated' });
+    }
+});
+
+// get cookies for testing
+app.get('/get_cookies', (req, res) => {
+    res.json(req.cookies);
+});
+
+// getting user data
+app.get('/get_user_data', async (req, res) => {
+
+    // using query string instead of body
+    const user_id = req.query.id
+
+    // find user by id in the collection
+    const user = await User.findById(user_id).select('username email properties dateCreated')
+
+    if(user){
+        res.status(200).json(user)
+    }else{
+        res.status(400).json({ 'message': 'user not found' })
     }
 });
 
