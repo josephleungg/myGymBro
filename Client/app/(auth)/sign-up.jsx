@@ -4,6 +4,7 @@ import FormField from '../../components/formfield.jsx'
 import CustomButton from '../../components/custombutton.jsx'
 import React, { useState } from 'react'
 import { Link, router } from 'expo-router'
+import Config from 'react-native-config';
 
 export default function SignUp() {
   const [form, setForm] = useState({username: "", email: "", password: ""})
@@ -13,7 +14,7 @@ export default function SignUp() {
   const submit = async () => {
     // try and catching fetch request for signup
     try{
-      const res = await fetch('http://192.168.2.32:5000/signup', {
+      const res = await fetch(Config.IP_ADDRESS + 'signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -32,6 +33,7 @@ export default function SignUp() {
       router.replace('/home')
     }catch(e){
       console.log('Error:', e)
+      console.log()
       Alert.alert('Error:', e.message)
       setIsSubmitting(false);
     }

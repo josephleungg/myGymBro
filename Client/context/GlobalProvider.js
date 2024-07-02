@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import Config from 'react-native-config';
 
 const GlobalContext = createContext();
 export const useGlobalContext = () => useContext(GlobalContext);
@@ -18,7 +19,7 @@ export default function GlobalProvider({ children }) {
         const fetchUserData = async () => {
             try {
                 // grabbing jwt from cookies through api call
-                const res = await fetch('http://192.168.2.32:5000/verifyjwt');
+                const res = await fetch(Config.IP_ADDRESS + 'verifyjwt');
 
                 // checking if jwt is in cookies, if status not 200 then jwt is not verified
                 if(res.status !== 200){
@@ -33,7 +34,7 @@ export default function GlobalProvider({ children }) {
                 
                 // if jwt is verified then grab user data
                 try{
-                    const res = await fetch('http://192.168.2.32:5000/get_user_data?id='+userID.id, {
+                    const res = await fetch(Config.IP_ADDRESS + 'get_user_data?id='+userID.id, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json'

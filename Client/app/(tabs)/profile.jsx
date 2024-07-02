@@ -3,6 +3,7 @@ import { router } from 'expo-router'
 import React, { useContext, useState, useEffect } from 'react'
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import CustomButton from '../../components/custombutton.jsx'
+import Config from 'react-native-config';
 
 export default function Profile() {
   const { user, username, email, properties, dateCreated } = useGlobalContext();
@@ -10,7 +11,7 @@ export default function Profile() {
   // function to logout the user on profile tab
   const logout = async () => {
     try{
-      const res = await fetch('http://192.168.2.32:5000/clear_cookies')
+      const res = await fetch(Config.IP_ADDRESS + 'clear_cookies')
       const data = await res.json()
       console.log(data)
       router.replace('/sign-in')

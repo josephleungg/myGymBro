@@ -5,9 +5,11 @@ import User from './models/users.model.js'
 import updateUsers from './helper/updateSchemas.js'
 import cookieParser from 'cookie-parser'
 import jwt from 'jsonwebtoken'
+import { config } from 'dotenv';
+config();
 
 // connecting to the database
-mongoose.connect('mongodb+srv://admin:k5H4dusEVAZXTy9O@mygymbro.dzpouaw.mongodb.net/myGymBro?retryWrites=true&w=majority&appName=myGymBro')
+mongoose.connect(process.env.MONGODB_URL)
   .then(() => console.log('Connected to db!'))
   .catch((e) => {console.log(e)});
 
