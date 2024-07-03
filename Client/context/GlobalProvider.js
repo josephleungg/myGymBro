@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import Config from 'react-native-config';
+import { IP_ADDRESS } from '@env';
 
 const GlobalContext = createContext();
 export const useGlobalContext = () => useContext(GlobalContext);
@@ -19,7 +19,13 @@ export default function GlobalProvider({ children }) {
         const fetchUserData = async () => {
             try {
                 // grabbing jwt from cookies through api call
-                const res = await fetch(Config.IP_ADDRESS + 'verifyjwt');
+                const res = await fetch(IP_ADDRESS + 'verifyjwt', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
+                });
 
                 // checking if jwt is in cookies, if status not 200 then jwt is not verified
                 if(res.status !== 200){
@@ -31,17 +37,17 @@ export default function GlobalProvider({ children }) {
 
                 // if user JWT is recognized then grab the user id and set it in globalprovider
                 const userID = await res.json();
-                
+
                 // if jwt is verified then grab user data
                 try{
-                    const res = await fetch(Config.IP_ADDRESS + 'get_user_data?id='+userID.id, {
+                    const res = await fetch(IP_ADDRESS + 'get_user_data?id='+userID.id, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                     })
                     const data = await res.json()
-            
+
                     setUsername(data.username)
                     setEmail(data.email)
                     setProperties(data.properties)
@@ -67,9 +73,8 @@ export default function GlobalProvider({ children }) {
                 setIsLoading(false);
             }
         }
-
-        fetchUserData();
-    }, [])
+        fetchUserData()
+    }, [isLoggedIn])
 
     return(
         <GlobalContext.Provider

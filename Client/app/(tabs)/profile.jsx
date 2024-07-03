@@ -3,17 +3,17 @@ import { router } from 'expo-router'
 import React, { useContext, useState, useEffect } from 'react'
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import CustomButton from '../../components/custombutton.jsx'
-import Config from 'react-native-config';
+import { IP_ADDRESS } from '@env';
 
 export default function Profile() {
-  const { user, username, email, properties, dateCreated } = useGlobalContext();
+  const { user, username, email, properties, dateCreated, isLoggedIn, setIsLoggedIn } = useGlobalContext();
 
   // function to logout the user on profile tab
   const logout = async () => {
     try{
-      const res = await fetch(Config.IP_ADDRESS + 'clear_cookies')
+      const res = await fetch(IP_ADDRESS + 'clear_cookies')
       const data = await res.json()
-      console.log(data)
+      setIsLoggedIn(false)
       router.replace('/sign-in')
     }catch(e){
       console.log('Error:', e)
@@ -25,11 +25,19 @@ export default function Profile() {
     console.log(user)
   }
 
+  const getUserInfo = async () => {
+    console.log(username)
+    console.log(email)
+    console.log(properties)
+    console.log(dateCreated)
+  }
+
   const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
   
   const getMonthName = (monthNumber) => {
     // Subtract 1 to convert month number (1-12) to array index (0-11)
+    console.log(dateCreated)
     return monthNames[monthNumber - 1];
   }
 
@@ -42,6 +50,7 @@ export default function Profile() {
         {/* button for logout */}
         <Button onPress={logout} title="Logout"/>
         <Button onPress={getuid} title="get uid"/>
+        <Button onPress={getUserInfo} title="get userinfo"/>
 
 
       </View>

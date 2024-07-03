@@ -1,20 +1,22 @@
+import { IP_ADDRESS } from '@env';
 import { View, Text, SafeAreaView, ScrollView, Image, Alert } from 'react-native'
 import images from '../../helper/images.js'
 import FormField from '../../components/formfield.jsx'
 import CustomButton from '../../components/custombutton.jsx'
 import React, { useState } from 'react'
 import { Link, router } from 'expo-router'
-import Config from 'react-native-config';
+import { useGlobalContext } from '../../context/GlobalProvider.js';
 
 export default function SignUp() {
   const [form, setForm] = useState({username: "", email: "", password: ""})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { user, username, email, properties, dateCreated, isLoggedIn, setIsLoggedIn } = useGlobalContext();
 
   // function to submit the form
   const submit = async () => {
     // try and catching fetch request for signup
     try{
-      const res = await fetch(Config.IP_ADDRESS + 'signup', {
+      const res = await fetch(IP_ADDRESS + 'signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -30,10 +32,11 @@ export default function SignUp() {
 
       console.log('User created successfully')
       setIsSubmitting(true);
+      setIsLoggedIn(true);
       router.replace('/home')
     }catch(e){
       console.log('Error:', e)
-      console.log()
+      console.log(IP_ADDRESS)
       Alert.alert('Error:', e.message)
       setIsSubmitting(false);
     }

@@ -1,19 +1,21 @@
-import { View, Text, SafeAreaView, ScrollView, Image } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, Image, Button } from 'react-native'
 import images from '../../helper/images.js'
 import FormField from '../../components/formfield.jsx'
 import CustomButton from '../../components/custombutton.jsx'
 import React, { useState } from 'react'
 import { Link, router } from 'expo-router'
-import Config from 'react-native-config';
+import { IP_ADDRESS } from '@env';
+import { useGlobalContext } from '../../context/GlobalProvider.js';
 
 export default function SignIn() {
   const [form, setForm] = useState({email: "", password: ""})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { user, username, email, properties, dateCreated, isLoggedIn, setIsLoggedIn } = useGlobalContext();
 
   const submit = async () => {
     // try and catching fetch request for signup
     try{
-      const res = await fetch(Config.IP_ADDRESS + 'login', {
+      const res = await fetch(IP_ADDRESS + 'login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -29,6 +31,7 @@ export default function SignIn() {
 
       console.log('User logged in successfully')
       setIsSubmitting(true);
+      setIsLoggedIn(true);
       router.replace('/home')
     }catch(e){
       console.log('Error:', e)
@@ -76,7 +79,7 @@ export default function SignIn() {
             <View className="justify-center pt-5 flex-row gap-2">
               <Link href='/sign-up' className="text-md text-gray-100 font-pregular">Don't have an account?</Link>
             </View>
-
+            
           </View>
 
           {/* View containing logo */}

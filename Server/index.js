@@ -103,6 +103,7 @@ app.get('/clear_cookies', (req, res) => {
         Object.keys(req.cookies).forEach(cookieName => {
             res.clearCookie(cookieName);
         });
+        console.log('User logged out successfully')
         res.json('All cookies cleared');
     } else {
         res.json('No cookies to clear');
@@ -143,6 +144,7 @@ app.get('/get_user_data', async (req, res) => {
     const user = await User.findById(user_id).select('username email properties dateCreated')
 
     if(user){
+        console.log('User found')
         res.status(200).json(user)
     }else{
         res.status(400).json({ 'message': 'user not found' })
