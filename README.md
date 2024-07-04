@@ -7,12 +7,12 @@
 ### Frontend
 React Native
 <br>
-![frontend](https://skillicons.dev/icons?i=js,react,tailwind,nodejs)
+[![frontend](https://skillicons.dev/icons?i=js,react,tailwind,nodejs)](https://github.com/tandpfun/skill-icons)
 
 ### Backend
 Express.js
 <br>
-![backend](https://skillicons.dev/icons?i=js,express,mongodb,nodejs)
+[![backend](https://skillicons.dev/icons?i=js,express,mongodb,nodejs)](https://github.com/tandpfun/skill-icons)
 
 # Features
 
