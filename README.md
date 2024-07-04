@@ -4,10 +4,15 @@
 
 <p>A mobile application used to track, create, and reach your fitness goals. This app is your all-in-one gym companion that helps you track your personal records, workout routines, meals and many more!</p>
 
-![Static Badge](https://img.shields.io/badge/React%20Native?logo=react)
+### Frontend
+React Native
+<br>
+![frontend](https://skillicons.dev/icons?i=js,react,tailwind,nodejs)
 
-[![NEXT.JS](https://img.shields.io/badge/NEXT-0769AD?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
-[![TAILWINDCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+### Backend
+Express.js
+<br>
+![backend](https://skillicons.dev/icons?i=js,express,mongodb,nodejs)
 
 # Features
 
