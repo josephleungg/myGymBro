@@ -1,14 +1,20 @@
-import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native'
 import { Link, router } from 'expo-router'
+import { useGlobalContext } from '../../context/GlobalProvider.js';
+import FormField from '../../components/formfield.jsx'
 import React, { useState } from 'react'
 
 export default function EditProfile() {
+  const { user, username, properties, isUpdated, setIsUpdated } = useGlobalContext();
+  const [ updatedProperties, setUpdatedProperties] = useState({})
 
+  // button functions
   const saveSubmit = () => {
     router.replace('/profile')
   }
 
   const cancelSubmit = () => {
+    setUpdatedProperties({})
     router.replace('/profile')
   }
 
@@ -22,12 +28,34 @@ export default function EditProfile() {
         </View>
 
         {/* Change Profile Fields */}
-        <View className='py-8'>
-          <Text className="text-white">testing</Text>
-        </View>
+
+        <FormField 
+              title="Name"
+              placeholder={properties.name !== "" ? properties.name : "Enter your name"}
+              value={updatedProperties.name}
+              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, name: e})}
+              otherStyles="mt-7"
+        />
+
+        <FormField 
+              title="Age"
+              placeholder={properties.age !== 0 ? properties.age : "Enter your age"}
+              value={updatedProperties.age}
+              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, age: e})}
+              otherStyles="mt-7"
+              keyboardType="numeric"
+        />
+
+        <FormField 
+              title="Bio"
+              placeholder={properties.bio !== "" ? properties.bio : "Enter your bio"}
+              value={updatedProperties.bio}
+              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, bio: e})}
+              otherStyles="mt-7"
+        />
 
         {/* Buttons Section */}
-        <View className="justify-center space-x-6 flex-row">
+        <View className="justify-center space-x-6 flex-row mt-7">
 
           {/* save button */}
           <TouchableOpacity className="bg-green-400 px-4 py-2 rounded-xl" onPress={saveSubmit}>

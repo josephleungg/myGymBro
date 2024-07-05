@@ -14,6 +14,7 @@ export default function GlobalProvider({ children }) {
     const [ email, setEmail ] = useState('');
     const [ properties, setProperties ] = useState({});
     const [ dateCreated, setDateCreated ] = useState({});
+    const [ isUpdated, setIsUpdated ] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -50,7 +51,10 @@ export default function GlobalProvider({ children }) {
 
                     setUsername(data.username)
                     setEmail(data.email)
-                    setProperties(data.properties)
+
+                    // setting properties
+                    const dataToProperties = {"name": data.name, "age": data.age, "bio": data.bio, "sex": data.sex, "weight": data.weight, "height": data.height, "bodyFat": data.bodyFat, "daysAtGym": data.daysAtGym, "progressPics": data.progressPics, "currentWorkout": data.currentWorkout}
+                    setProperties(dataToProperties)
                     
                     // getting year and month created
                     const dateObject = new Date(data.dateCreated)
@@ -74,7 +78,7 @@ export default function GlobalProvider({ children }) {
             }
         }
         fetchUserData()
-    }, [isLoggedIn])
+    }, [isLoggedIn, isUpdated])
 
     return(
         <GlobalContext.Provider
@@ -91,7 +95,9 @@ export default function GlobalProvider({ children }) {
                 properties,
                 setProperties,
                 dateCreated,
-                setDateCreated
+                setDateCreated,
+                isUpdated,
+                setIsUpdated
             }}
         >
             { children }

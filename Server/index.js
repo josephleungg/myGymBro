@@ -141,7 +141,7 @@ app.get('/get_user_data', async (req, res) => {
     const user_id = req.query.id
 
     // find user by id in the collection
-    const user = await User.findById(user_id).select('username email properties dateCreated')
+    const user = await User.findById(user_id)
 
     if(user){
         console.log('User found')
@@ -150,6 +150,37 @@ app.get('/get_user_data', async (req, res) => {
         res.status(400).json({ 'message': 'user not found' })
     }
 });
+
+// CHANGING DATABASE USER DOCUMENT
+// edit profile API
+app.put('/edit_profile', async (req, res) => {
+
+    // getting the user id from the query string
+    const user_id = req.query.id
+
+    // getting the data from the response body
+    const data = req.body
+
+    try {
+        // find user by the id and update the data
+        const user = await User.findByIdAndUpdate(user_id, {$set: data}, { new: true, runValidators: true });
+
+        if(user){
+            res.status(200).json({ 'message': 'Profile updated successfully' })
+        }else{
+            res.status(400).json({ 'message': 'user not found' })
+        }
+    }catch(error){
+        res.status(400).json({ 'message': error.message })
+    }
+});
+
+// change user password
+app.put('/change_password', (async) => (req, res) => {
+    const user_id = req.query.id
+
+    res.status(200).send({"message": "Password changed successfully"})
+})
 
 app.listen(5000, () => {
     console.log('server is running on port 5000')

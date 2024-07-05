@@ -6,13 +6,12 @@ import CustomButton from '../../components/custombutton.jsx'
 import { IP_ADDRESS } from '@env';
 
 export default function Profile() {
-  const { user, username, email, properties, dateCreated, isLoggedIn, setIsLoggedIn } = useGlobalContext();
+  const { user, username, email, properties, dateCreated, isLoggedIn, setIsLoggedIn, isUpdated, setIsUpdated } = useGlobalContext();
 
   // function to logout the user on profile tab
   const logout = async () => {
     try{
       const res = await fetch(IP_ADDRESS + 'clear_cookies')
-      const data = await res.json()
       setIsLoggedIn(false)
       router.replace('/sign-in')
     }catch(e){
@@ -35,6 +34,7 @@ export default function Profile() {
     console.log(email)
     console.log(properties)
     console.log(dateCreated)
+    setIsUpdated(!isUpdated)
   }
 
   const monthNames = ["January", "February", "March", "April", "May", "June",
