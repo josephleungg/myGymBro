@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, Button } from 'react-native'
+import {Picker} from '@react-native-picker/picker';
 import { Link, router } from 'expo-router'
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import FormField from '../../components/formfield.jsx'
@@ -6,7 +7,7 @@ import React, { useState } from 'react'
 
 export default function EditProfile() {
   const { user, username, properties, isUpdated, setIsUpdated } = useGlobalContext();
-  const [ updatedProperties, setUpdatedProperties] = useState({})
+  const [ updatedProperties, setUpdatedProperties] = useState({sex: "male"}) // set default sex to male because its the first option
 
   // button functions
   const saveSubmit = () => {
@@ -52,7 +53,48 @@ export default function EditProfile() {
               value={updatedProperties.bio}
               handleChangeText={(e) => setUpdatedProperties({...updatedProperties, bio: e})}
               otherStyles="mt-7"
+              multiline={true}
         />
+
+        <Picker
+          selectedValue={updatedProperties.sex}
+          onValueChange={(itemValue, itemIndex) =>
+            setUpdatedProperties({...updatedProperties, sex: itemValue})
+          }
+          itemStyle={{ color: 'gray', fontSize: 20 }}
+          >
+          <Picker.Item label="Male" value="male" />
+          <Picker.Item label="Female" value="female" />
+        </Picker>
+
+        <FormField 
+              title="Weight (lbs)"
+              placeholder={properties.weight !== 0 ? properties.weight : "Enter your weight"}
+              value={updatedProperties.weight}
+              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, weight: e})}
+              otherStyles="mt-7"
+              keyboardType="numeric"
+        />
+
+        <FormField 
+              title="Height (ft)"
+              placeholder={properties.height !== 0 ? properties.height : "Enter your height"}
+              value={updatedProperties.height}
+              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, height: e})}
+              otherStyles="mt-7"
+              keyboardType="numeric"
+        />
+
+        <FormField 
+              title="Body Fat (%)"
+              placeholder={properties.bodyFat !== 0 ? properties.bodyFat : "Enter your body fat"}
+              value={updatedProperties.bodyFat}
+              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, bodyFat: e})}
+              otherStyles="mt-7"
+              keyboardType="numeric"
+        />
+
+        <Button title="Press" onPress={() => {console.log(updatedProperties)}}/>
 
         {/* Buttons Section */}
         <View className="justify-center space-x-6 flex-row mt-7">

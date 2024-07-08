@@ -21,6 +21,7 @@ export default function FormField({ title, value, placeholder, handleChangeText,
                 onChangeText={handleChangeText}
                 keyboardType={props.keyboardType}
                 secureTextEntry={title === 'Password' && !showPassword}
+                multiline={props.multiline ? true : false}
             />
 
             {/* controlling the show password or hide password based on state */}
