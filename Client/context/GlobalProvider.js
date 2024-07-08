@@ -14,7 +14,6 @@ export default function GlobalProvider({ children }) {
     const [ email, setEmail ] = useState('');
     const [ properties, setProperties ] = useState({});
     const [ dateCreated, setDateCreated ] = useState({});
-    const [ isUpdated, setIsUpdated ] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -78,7 +77,7 @@ export default function GlobalProvider({ children }) {
             }
         }
         fetchUserData()
-    }, [isLoggedIn, isUpdated])
+    }, [isLoggedIn])
 
     return(
         <GlobalContext.Provider
@@ -96,8 +95,6 @@ export default function GlobalProvider({ children }) {
                 setProperties,
                 dateCreated,
                 setDateCreated,
-                isUpdated,
-                setIsUpdated
             }}
         >
             { children }

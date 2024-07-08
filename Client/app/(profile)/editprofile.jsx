@@ -6,7 +6,7 @@ import FormField from '../../components/formfield.jsx'
 import React, { useState } from 'react'
 
 export default function EditProfile() {
-  const { user, username, properties, isUpdated, setIsUpdated } = useGlobalContext();
+  const { user, username, properties} = useGlobalContext();
   const [ updatedProperties, setUpdatedProperties] = useState({sex: "male"}) // set default sex to male because its the first option
 
   // button functions

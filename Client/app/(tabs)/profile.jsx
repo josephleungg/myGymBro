@@ -10,14 +10,18 @@ export default function Profile() {
 
   // function to logout the user on profile tab
   const logout = async () => {
-    try{
-      const res = await fetch(IP_ADDRESS + 'clear_cookies')
-      setIsLoggedIn(false)
-      router.replace('/sign-in')
-    }catch(e){
-      console.log('Error:', e)
+    try {
+      // Ensure IP_ADDRESS is correctly formatted
+      const res = await fetch(IP_ADDRESS + 'clear_cookies', { method: 'GET' }); // Assuming it's a POST request
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      setIsLoggedIn(false);
+      router.replace('/sign-in');
+    } catch (e) {
+      console.log('Error:', e);
     }
-  }
+  };
 
   // function to edit profile
   const editSubmit = async () => {

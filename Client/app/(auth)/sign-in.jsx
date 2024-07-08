@@ -75,6 +75,8 @@ export default function SignIn() {
               isLoading={isSubmitting}
             />
 
+            <Button title="test" onPress={() => console.log(IP_ADDRESS)} />
+
             {/* sign up for an account text */}
             <View className="justify-center pt-5 flex-row gap-2">
               <Link href='/sign-up' className="text-md text-gray-100 font-pregular">Don't have an account?</Link>
