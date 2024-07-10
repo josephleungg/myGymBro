@@ -10,14 +10,58 @@ export default function EditProfile() {
   const { user, username, properties, setProperties } = useGlobalContext();
   const [ updatedProperties, setUpdatedProperties] = useState({sex: "male"}) // set default sex to male because its the first option
 
+
   // button functions
   const saveSubmit = async () => {
+    const cleanedProperties = cleanProperties()
+    updateProfile(cleanedProperties);
+    setProperties(resetProperties(cleanedProperties))
     router.replace('/profile')
   }
 
   const cancelSubmit = () => {
-    setUpdatedProperties({})
     router.replace('/profile')
+  }
+
+  // clean properties object before submitting to backend
+  function cleanProperties() {
+    const cleanedProperties = {}
+    for(const key in updatedProperties){
+      if(updatedProperties[key] !== "" && updatedProperties[key] !== 0){
+        cleanedProperties[key] = updatedProperties[key]
+      }
+    }
+    return cleanedProperties
+  }
+
+  // function for setting the properties to the new ones, needed so that we dont need to useeffect again in globalprovider
+  function resetProperties(object) {
+    const oldPlusNewProperties = object
+    for(const key in properties){
+      if(oldPlusNewProperties[key] === undefined){
+        oldPlusNewProperties[key] = properties[key]
+      }
+    }
+    return oldPlusNewProperties
+  }
+
+  // fetch from backend to update and set user properties and then reset updatedProperties
+  async function updateProfile(changedProperties) {
+    try{
+      const edit_profile = await fetch(IP_ADDRESS + 'edit_profile?id=' + user, {
+        method: 'PUT',
+        headers: {
+          "Content-Type": 'application/json'
+        },
+        body: JSON.stringify(changedProperties)
+      })
+
+      const message = await edit_profile.json()
+
+      console.log(message.message)
+    }catch(e){
+      console.log(e.message)
+    }
   }
 
   return (
@@ -41,9 +85,9 @@ export default function EditProfile() {
 
         <FormField 
               title="Age"
-              placeholder={properties.age !== 0 ? properties.age : "Enter your age"}
+              placeholder={properties.age !== 0 ? properties.age.toString() : "Enter your age"}
               value={updatedProperties.age}
-              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, age: e})}
+              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, age: !isNaN(parseInt(e, 10)) ? parseInt(e, 10) : 0})}
               otherStyles="mt-7"
               keyboardType="numeric"
         />
@@ -70,35 +114,36 @@ export default function EditProfile() {
 
         <FormField 
               title="Weight (lbs)"
-              placeholder={properties.weight !== 0 ? properties.weight : "Enter your weight"}
+              placeholder={properties.weight !== 0 ? properties.weight.toString() : "Enter your weight"}
               value={updatedProperties.weight}
-              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, weight: e})}
+              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, weight: !isNaN(parseInt(e, 10)) ? parseInt(e, 10) : 0})}
               otherStyles="mt-7"
               keyboardType="numeric"
         />
 
         <FormField 
               title="Height (ft)"
-              placeholder={properties.height !== 0 ? properties.height : "Enter your height"}
+              placeholder={properties.height !== 0 ? properties.height.toString() : "Enter your height"}
               value={updatedProperties.height}
-              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, height: e})}
+              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, height: !isNaN(parseInt(e, 10)) ? parseInt(e, 10) : 0})}
               otherStyles="mt-7"
               keyboardType="numeric"
         />
 
         <FormField 
               title="Body Fat (%)"
-              placeholder={properties.bodyFat !== 0 ? properties.bodyFat : "Enter your body fat"}
+              placeholder={properties.bodyFat !== 0 ? properties.bodyFat.toString() : "Enter your body fat"}
               value={updatedProperties.bodyFat}
-              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, bodyFat: e})}
+              handleChangeText={(e) => setUpdatedProperties({...updatedProperties, bodyFat: !isNaN(parseInt(e, 10)) ? parseInt(e, 10) : 0})}
               otherStyles="mt-7"
               keyboardType="numeric"
         />
-
-        <Button title="Press" onPress={() => {console.log(updatedProperties)}}/>
+        
+        {/* BUGTESTING FUNCTIONS, CAN COMMENT THEM OUT WHEN NOT NEEDED */}
+        {/* <Button title="Press" onPress={() => {console.log(updatedProperties)}}/> */}
 
         {/* Buttons Section */}
-        <View className="justify-center space-x-6 flex-row mt-7">
+        <View className="justify-center space-x-6 flex-row mt-7 pb-16">
 
           {/* save button */}
           <TouchableOpacity className="bg-green-400 px-4 py-2 rounded-xl" onPress={saveSubmit}>
