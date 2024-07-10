@@ -3,14 +3,15 @@ import {Picker} from '@react-native-picker/picker';
 import { Link, router } from 'expo-router'
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import FormField from '../../components/formfield.jsx'
+import { IP_ADDRESS } from '@env';
 import React, { useState } from 'react'
 
 export default function EditProfile() {
-  const { user, username, properties} = useGlobalContext();
+  const { user, username, properties, setProperties } = useGlobalContext();
   const [ updatedProperties, setUpdatedProperties] = useState({sex: "male"}) // set default sex to male because its the first option
 
   // button functions
-  const saveSubmit = () => {
+  const saveSubmit = async () => {
     router.replace('/profile')
   }
 
