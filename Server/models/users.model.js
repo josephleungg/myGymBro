@@ -60,6 +60,10 @@ const UsersSchema = mongoose.Schema({
         type: Array, 
         default: [] 
     },
+    mealDays: {
+        type: Array,
+        default: []
+    },
     dateCreated: {
         type: Date,
         default: Date.now

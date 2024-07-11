@@ -2,14 +2,13 @@ import mongoose from 'mongoose';
 import User from '../models/users.model.js'
 
 export default async function updateUsers() {
-    const updateResult = await User.updateMany({}, {
-        $set: {
-            email: {
-                type: String,
-                unique: true,
-                required: true
-            },
-        }
-    });
-    console.log(updateResult); // This will log the result of the update operation
+    try {
+        await User.updateMany(
+          {}, // Filter for all documents
+          { $set: { mealDays: [] } } // Set 'mealDays' to an empty array for all documents
+        );
+        console.log('All documents updated successfully.');
+      } catch (error) {
+        console.error('Error updating documents:', error);
+      }
 }
