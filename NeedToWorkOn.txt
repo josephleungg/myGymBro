@@ -1,0 +1,10 @@
+Database
+- Add a new collection to hold all exercises, users can only see the preset ones plus the ones that they create
+- Add a new collection to hold all meals, users can only see their own created set meals
+- Add field called mealDays that holds the meals that they had that day, links to the document in the meals collection
+- daysAtGym holds objects and each one has a date, that days workout link each exercise to the exercise in the collection
+
+Home Screen
+- Shows user their rpevious workouts
+- Show button for start workout if daysAtGym is empty
+- 

@@ -1,4 +1,4 @@
-import { View, Text, Button, SafeAreaView, ScrollView } from 'react-native'
+import { View, Text, Button, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
 import { useGlobalContext } from '../../context/GlobalProvider.js';
@@ -25,7 +25,7 @@ export default function Profile() {
 
   // function to edit profile
   const editSubmit = async () => {
-    router.push('/editprofile')
+    router.replace('/editprofile')
   }
 
   // function to get user id from the server for testing
@@ -55,14 +55,20 @@ export default function Profile() {
       
         <View className='items-center pt-20'>
           <Text className='text-white'>{username}</Text>
-          <Text className='text-white'>Joined in {getMonthName(dateCreated.month)} {dateCreated.year}</Text>
+          <Text className='text-white pb-4'>Joined in {getMonthName(dateCreated.month)} {dateCreated.year}</Text>
 
-          <Button title="Edit Profile" onPress={editSubmit}/>
-
+          <TouchableOpacity className="bg-gray-700 px-6 py-2 rounded-md" onPress={editSubmit}>
+            <Text className="text-slate-100 font-pmedium">Edit Profile</Text>
+          </TouchableOpacity>
+          
           {/* button for logout */}
-          <Button onPress={logout} title="Logout"/>
-          <Button onPress={getuid} title="get uid"/>
-          <Button onPress={getUserInfo} title="get userinfo"/>
+          <TouchableOpacity className="bg-red-400 px-2 py-2 rounded-xl" onPress={logout}>
+            <Text className="text-black font-pmedium">Logout</Text>
+          </TouchableOpacity>
+
+          {/* BUTTONS USED FOR DEBUGGING, UNCOMMENT TO CONSOLE LOG USER INFO */}
+          {/* <Button onPress={getuid} title="get uid"/>
+          <Button onPress={getUserInfo} title="get userinfo"/> */}
         </View>
 
       </ScrollView>
