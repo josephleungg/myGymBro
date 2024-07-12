@@ -1,9 +1,10 @@
-import { View, Text, Button, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import CustomButton from '../../components/custombutton.jsx'
 import { IP_ADDRESS } from '@env';
+import pfp from '../../assets/icon.png'
 
 export default function Profile() {
   const { user, username, email, properties, dateCreated, isLoggedIn, setIsLoggedIn, isUpdated, setIsUpdated } = useGlobalContext();
@@ -52,23 +53,52 @@ export default function Profile() {
   return (
     <SafeAreaView className="bg-primary">
       <ScrollView className="h-full">
-      
-        <View className='items-center pt-20'>
-          <Text className='text-white'>{username}</Text>
-          <Text className='text-white pb-4'>Joined in {getMonthName(dateCreated.month)} {dateCreated.year}</Text>
 
-          <TouchableOpacity className="bg-gray-700 px-6 py-2 rounded-md" onPress={editSubmit}>
-            <Text className="text-slate-100 font-pmedium">Edit Profile</Text>
-          </TouchableOpacity>
+        <View className='items-center pt-20 pb-8'>
+          
+          <Image 
+            source={pfp}
+            className="w-[100px] h-[100px] rounded-full self-center"
+          />
+
+          <Text className='text-white pb-2 pt-2'>{username}</Text>
+          <Text className='text-white pb-10'>Joined in {getMonthName(dateCreated.month)} {dateCreated.year}</Text>
+          
+          {/* profile buttons */}
+          <View className='pb-3'>
+            <TouchableOpacity className="bg-secondary px-4 py-2 rounded-2xl" onPress={editSubmit}>
+              <Text className="text-black font-pmedium">Edit Profile</Text>
+            </TouchableOpacity>
+          </View>
           
           {/* button for logout */}
-          <TouchableOpacity className="bg-red-400 px-2 py-2 rounded-xl" onPress={logout}>
-            <Text className="text-black font-pmedium">Logout</Text>
-          </TouchableOpacity>
-
+          <View>
+            <TouchableOpacity className="bg-red-500 px-7 py-2 rounded-2xl" onPress={logout}>
+              <Text className="text-black font-pmedium">Logout</Text>
+            </TouchableOpacity>
+          </View>
+          
           {/* BUTTONS USED FOR DEBUGGING, UNCOMMENT TO CONSOLE LOG USER INFO */}
           {/* <Button onPress={getuid} title="get uid"/>
           <Button onPress={getUserInfo} title="get userinfo"/> */}
+        </View>
+
+        {/* Main Section View */}
+        <View>
+
+          {/* List Buttons */}
+          <View className="flex-row w-full space-x-4 justify-between">
+              <TouchableOpacity className="flex-1 bg-gray-200 py-2 ml-4 rounded-2xl items-center" onPress={() => console.log("Exercise List Works")}>
+                <Text className="text-black text-lg font-pmedium">Exercise List</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity className="flex-1 bg-gray-200 py-2 mr-4 rounded-2xl items-center" onPress={() => console.log("Meals List Works")}>
+                <Text className="text-black text-lg font-pmedium">Meals List</Text>
+              </TouchableOpacity>
+          </View>
+          
+          
+
         </View>
 
       </ScrollView>
