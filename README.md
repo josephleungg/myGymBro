@@ -16,6 +16,7 @@ Express.js
 
 ### Figma
 [Prototype](https://www.figma.com/proto/Ax6XkJf6EYVP7Sgsg55u8V/myGymbro?t=xzK24a0DtlFAPTdl-1)
+<br>
 [Figma File](https://www.figma.com/design/Ax6XkJf6EYVP7Sgsg55u8V/myGymbro?node-id=0-1&t=xzK24a0DtlFAPTdl-1)
 
 # Features
