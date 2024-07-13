@@ -88,16 +88,19 @@ export default function Profile() {
 
           {/* List Buttons */}
           <View className="flex-row w-full space-x-4 justify-between">
-              <TouchableOpacity className="flex-1 bg-gray-200 py-2 ml-4 rounded-2xl items-center" onPress={() => console.log("Exercise List Works")}>
-                <Text className="text-black text-lg font-pmedium">Exercise List</Text>
+              <TouchableOpacity className="flex-1 bg-[#2e2e48] py-5 ml-4 rounded-3xl items-center" onPress={() => console.log("Exercise List Works")}>
+                <Text className="text-white text-md font-psemibold">Exercise List</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity className="flex-1 bg-gray-200 py-2 mr-4 rounded-2xl items-center" onPress={() => console.log("Meals List Works")}>
-                <Text className="text-black text-lg font-pmedium">Meals List</Text>
+              <TouchableOpacity className="flex-1 bg-[#2e2e48] py-5 mr-4 rounded-3xl items-center" onPress={() => console.log("Meals List Works")}>
+                <Text className="text-white text-md font-psemibold">Meals List</Text>
               </TouchableOpacity>
           </View>
           
-          
+          {/* Calendar */}
+          <View className="w-full mt-10">
+            <Text className="text-white text-lg font-psemibold text-center">Calendar Coming Soon...</Text>
+          </View>
 
         </View>
 
