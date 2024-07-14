@@ -1,8 +1,8 @@
 import { View, Text, Button, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
+import CustomCalendar from '../../components/customcalendar.jsx'
 import { useGlobalContext } from '../../context/GlobalProvider.js';
-import CustomButton from '../../components/custombutton.jsx'
 import { IP_ADDRESS } from '@env';
 import pfp from '../../assets/icon.png'
 
@@ -98,8 +98,9 @@ export default function Profile() {
           </View>
           
           {/* Calendar */}
-          <View className="w-full mt-10">
-            <Text className="text-white text-lg font-psemibold text-center">Calendar Coming Soon...</Text>
+          <View className="w-full my-10 px-4">
+            {/* <Text className="text-white text-lg font-psemibold text-center">Calendar Coming Soon...</Text> */}
+            <CustomCalendar />
           </View>
 
         </View>
