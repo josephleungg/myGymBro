@@ -151,6 +151,9 @@ app.get('/get_user_data', async (req, res) => {
     }
 });
 
+// EXERCISES DATABASE
+// 
+
 // CHANGING DATABASE USER DOCUMENT
 // edit profile API
 app.put('/edit_profile', async (req, res) => {

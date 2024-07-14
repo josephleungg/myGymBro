@@ -52,7 +52,7 @@ export default function GlobalProvider({ children }) {
                     setEmail(data.email)
 
                     // setting properties
-                    const dataToProperties = {"name": data.name, "age": data.age, "bio": data.bio, "sex": data.sex, "weight": data.weight, "height": data.height, "bodyFat": data.bodyFat, "daysAtGym": data.daysAtGym, "progressPics": data.progressPics, "currentWorkout": data.currentWorkout}
+                    const dataToProperties = {"name": data.name, "age": data.age, "bio": data.bio, "sex": data.sex, "weight": data.weight, "height": data.height, "bodyFat": data.bodyFat, "daysAtGym": data.daysAtGym, "progressPics": data.progressPics, "currentWorkout": data.currentWorkout, "mealDays": data.mealDays}
                     setProperties(dataToProperties)
                     
                     // getting year and month created
