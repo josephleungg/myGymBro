@@ -40,6 +40,7 @@ export default function RootLayout() {
   return (
     <GlobalProvider>
       <Stack>
+        <Stack.Screen name="(trackers)" options={{ headerShown: false }} />
         <Stack.Screen name="(profile)" options={{ headerShown: false, gestureEnabled: true }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

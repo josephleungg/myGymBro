@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 import React from 'react'
 
-export default function ExercisePage() {
+export default function MealPage() {
     const { id } = useLocalSearchParams()
     return (
         <View className="h-full bg-primary items-center justify-center">
