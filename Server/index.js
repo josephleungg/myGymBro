@@ -207,8 +207,20 @@ app.put('/change_password', verifyJWT, async (req, res) => {
 
 // EXERCISES DATABASE
 // show all exercises list
-app.get('/exercises_list', async (req, res) => {
-    res.send({'message': 'works'})
+app.get('/exercises_list', verifyJWT, async (req, res) => {
+    try{
+        const documents = await Exercise.find({$or: [{ creator: req.id }, { isVisible: true }]})
+        const exercisesList = {}
+    
+        for(let i = 0;i < documents.length;i++){
+            exercisesList[i+1] = documents[i]
+        }
+
+        console.log("Exercises list successfully retrieved")
+        res.status(200).json(exercisesList)
+    }catch(e){
+        res.status(500).json({'message': e})
+    }
 })
 
 // create new exercise
@@ -232,7 +244,51 @@ app.put('/create_exercise', verifyJWT, async (req, res) => {
 })
 
 // delete exercise
-app.delete('/delete_exercise', async (req, res) => {
+app.delete('/delete_exercise', verifyJWT, async (req, res) => {
+    res.send({'message': 'works'})
+})
+
+// MEALS DATABASE
+// show all exercises list
+app.get('/meals_list', verifyJWT, async (req, res) => {
+    try{
+        const documents = await Meal.find({$or: [{ creator: req.id }, { isVisible: true }]})
+        const mealList = {}
+    
+        for(let i = 0;i < documents.length;i++){
+            mealList[i+1] = documents[i]
+        }
+
+        console.log("Meal list successfully retrieved")
+        res.status(200).json(mealList)
+    }catch(e){
+        res.status(500).json({'message': e})
+    }
+})
+
+// create new meal
+app.put('/create_meal', verifyJWT, async (req, res) => {
+    const mealReq = {
+        name: req.body.name,
+        creator: req.id, // don't need to include this in the request body because it is included in the JWT verification
+        description: req.body.description,
+        calories: req.body.calories,
+        protein: req.body.protein,
+        carbs: req.body.carbs,
+        fats: req.body.fats,
+        isVisible: req.body.isVisible
+    }
+
+    try{
+        const meal = await Meal.create(mealReq)
+        res.status(200).json({'message': 'Meal created successfully'})
+    }catch(e){
+        res.status(500).json({'message': e})
+    }
+})
+
+// delete meal
+app.delete('/delete_meal', async (req, res) => {
     res.send({'message': 'works'})
 })
 

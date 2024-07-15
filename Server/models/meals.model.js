@@ -6,6 +6,10 @@ const MealsSchema = mongoose.Schema({
         unique: true,
         required: [true, 'Please enter a name'],
     },
+    creator: {
+        type: String,
+        default: '',
+    },
     description: {
         type: String,
         default: 'None',
@@ -25,6 +29,10 @@ const MealsSchema = mongoose.Schema({
     fats: {
         type: Number,
         default: 0,
+    },
+    isVisible: {
+        type: Boolean,
+        default: false,
     },
 })
 

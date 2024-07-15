@@ -8,7 +8,7 @@ const ExercisesSchema = mongoose.Schema({
     },
     creator: {
         type: String,
-        default: 'Admin',
+        default: '',
     },
     description: {
         type: String,
