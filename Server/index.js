@@ -151,9 +151,6 @@ app.get('/get_user_data', async (req, res) => {
     }
 });
 
-// EXERCISES DATABASE
-// 
-
 // CHANGING DATABASE USER DOCUMENT
 // edit profile API
 app.put('/edit_profile', async (req, res) => {
@@ -183,6 +180,22 @@ app.put('/change_password', (async) => (req, res) => {
     const user_id = req.query.id
 
     res.status(200).send({"message": "Password changed successfully"})
+})
+
+// EXERCISES DATABASE
+// show all exercises list
+app.get('/exercises_list', async (req, res) => {
+    res.send({'message': 'works'})
+})
+
+// create new exercise
+app.put('/create_exercise', async (req, res) => {
+    res.send({'message': 'works'})
+})
+
+// delete exercise
+app.delete('/delete_exercise', async (req, res) => {
+    res.send({'message': 'works'})
 })
 
 app.listen(5000, () => {
