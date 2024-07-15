@@ -26,11 +26,11 @@ Express.js
 - Welcome Onboarding
 - Login/Signup
 - General Tabs
-- Backend Authentication
+- User Authentication
+- Profile Tab (incl. Editing Profile)
 
 ### Work in progress
 
-- Profile (user preferences, goals, and general user info)
 - Fitness/Meal Tracker
 - AI Workout/Meal Plan Generator
 - AI Camera Exercise form checker
