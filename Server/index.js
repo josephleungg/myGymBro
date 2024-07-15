@@ -2,6 +2,9 @@ import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose';
 import User from './models/users.model.js'
+import Exercise from './models/exercises.model.js'
+import UserExercise from './models/userexercise.model.js'
+import Meal from './models/meals.model.js'
 import updateUsers from './helper/updateSchemas.js'
 import cookieParser from 'cookie-parser'
 import jwt from 'jsonwebtoken'
@@ -110,7 +113,27 @@ app.get('/clear_cookies', (req, res) => {
     }
 });
 
-// verifying jwt
+// middleware to verify JWT for other routes
+const verifyJWT = (req, res, next) => {
+    const token = req.cookies.jwt;
+    if(token){
+        jwt.verify(token, 'myGymBrosecretkey', (err, decodedToken) => {
+            if(err){
+                console.log('jwt is invalid')
+                res.status(400).json({ 'message': 'jwt is invalid' });
+            }else{
+                console.log('user is authenticated')
+                req.id = decodedToken.id;
+                next();
+            }
+        });
+    }else{
+        console.log('tried to verify jwt but user is not authenticated')
+        res.status(400).json({ 'message': 'not authenticated' });
+    }
+};
+
+// route used for initial check of JWT at login
 app.get('/verifyjwt', (req, res) => {
     const token = req.cookies.jwt;
     if(token){
@@ -176,8 +199,8 @@ app.put('/edit_profile', async (req, res) => {
 });
 
 // change user password
-app.put('/change_password', (async) => (req, res) => {
-    const user_id = req.query.id
+app.put('/change_password', verifyJWT, async (req, res) => {
+    const user_id = req.id
 
     res.status(200).send({"message": "Password changed successfully"})
 })
@@ -189,8 +212,23 @@ app.get('/exercises_list', async (req, res) => {
 })
 
 // create new exercise
-app.put('/create_exercise', async (req, res) => {
-    res.send({'message': 'works'})
+app.put('/create_exercise', verifyJWT, async (req, res) => {
+    const exerciseReq = {
+        name: req.body.name,
+        creator: req.id, // don't need to include this in the request body because it is included in the JWT verification
+        description: req.body.description,
+        primaryMuscle: req.body.primaryMuscle,
+        otherMuscles: req.body.otherMuscles,
+        equipment: req.body.equipment,
+        isVisible: req.body.isVisible
+    }
+
+    try{
+        const exercise = await Exercise.create(exerciseReq)
+        res.status(200).json({'message': 'Exercise created successfully'})
+    }catch(e){
+        res.status(500).json({'message': e})
+    }
 })
 
 // delete exercise

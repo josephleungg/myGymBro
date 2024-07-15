@@ -26,6 +26,10 @@ const ExercisesSchema = mongoose.Schema({
         type: String,
         default: 'None',
     },
+    isVisible: {
+        type: Boolean,
+        default: false,
+    },
 })
 
 const Exercise = mongoose.model('Exercise', ExercisesSchema);
