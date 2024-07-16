@@ -88,7 +88,7 @@ export default function Profile() {
 
           {/* List Buttons */}
           <View className="flex-row w-full space-x-4 justify-between">
-              <TouchableOpacity className="flex-1 bg-[#2e2e48] py-5 ml-4 rounded-3xl items-center" onPress={() => console.log("Exercise List Works")}>
+              <TouchableOpacity className="flex-1 bg-[#2e2e48] py-5 ml-4 rounded-3xl items-center" onPress={() => router.push("/exercises/exercise-list")}>
                 <Text className="text-white text-md font-psemibold">Exercise List</Text>
               </TouchableOpacity>
 
@@ -104,7 +104,6 @@ export default function Profile() {
           </View>
 
           <Button onPress={() => router.push({pathname: "/workouts/[id]", params: { id: "howcome this doesnt work"}})} title="go to test" />
-          <Button onPress={() => router.push("/exercises/exercise-list")} title="go to lists" />
 
         </View>
 
