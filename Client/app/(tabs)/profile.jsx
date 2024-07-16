@@ -104,7 +104,7 @@ export default function Profile() {
           </View>
 
           <Button onPress={() => router.push({pathname: "/workouts/[id]", params: { id: "howcome this doesnt work"}})} title="go to test" />
-          <Button onPress={() => router.push("/exercises/past-workouts")} title="go to lists" />
+          <Button onPress={() => router.push("/exercises/exercise-list")} title="go to lists" />
 
         </View>
 
