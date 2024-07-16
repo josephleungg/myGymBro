@@ -236,16 +236,55 @@ app.put('/create_exercise', verifyJWT, async (req, res) => {
     }
 
     try{
-        const exercise = await Exercise.create(exerciseReq)
+        await Exercise.create(exerciseReq)
         res.status(200).json({'message': 'Exercise created successfully'})
     }catch(e){
-        res.status(500).json({'message': e})
+        // checking for empty required fields
+        if(e.message.includes('Exercise validation failed:')){
+            let errorMessages = { name: '', primaryMuscle: '', equipment: '' };
+
+            Object.values(e.errors).forEach(error => {
+                errorMessages[error.path] = error.properties.message;
+            });
+        
+            let returnMessage = { 'message': "" };
+
+            Object.values(errorMessages).forEach(error => {
+                if(error !== ''){
+                    returnMessage['message'] += error + '. ';
+                };
+            });
+
+            res.status(500).json(returnMessage)
+        }else if(e.code === 11000){
+            res.status(500).json({'message': 'Exercise name already exists'})
+            console.log('Exercise name already exists')
+        // error checking for any other error
+        }else{
+            res.status(500).json({'message': 'An error has occured, please try again'})
+            console.log('An error has occured, please try again')
+        }
     }
 })
 
 // delete exercise
 app.delete('/delete_exercise', verifyJWT, async (req, res) => {
-    res.send({'message': 'works'})
+    // BODY MUST BE { _id: exercise_id }
+    try{
+        const exercise_id = req.body._id;
+        const creator_id = await Exercise.findById(exercise_id)
+
+        // checking if the req.id which comes from verifyJWT is the same as the creator of the exercise
+        if(req.id !== creator_id.creator){
+            throw new Error('User is not authorized to delete this exercise')
+        }
+
+        // put meal id in the request body as _id
+        await Exercise.findByIdAndDelete(exercise_id)
+        res.status(200).json({'message': 'Exercise deleted successfully'})
+    }catch(e){
+        res.status(500).json({'message': e.message})
+    }
 })
 
 // MEALS DATABASE
@@ -283,13 +322,53 @@ app.put('/create_meal', verifyJWT, async (req, res) => {
         const meal = await Meal.create(mealReq)
         res.status(200).json({'message': 'Meal created successfully'})
     }catch(e){
-        res.status(500).json({'message': e})
+        // checking for empty required fields
+        if(e.message.includes('Meal validation failed:')){
+            let errorMessages = { name: '' };
+
+            Object.values(e.errors).forEach(error => {
+                errorMessages[error.path] = error.properties.message;
+            });
+        
+            let returnMessage = { 'message': "" };
+
+            Object.values(errorMessages).forEach(error => {
+                if(error !== ''){
+                    returnMessage['message'] += error + '. ';
+                };
+            });
+
+            res.status(500).json(returnMessage)
+        }else if(e.code === 11000){
+            res.status(500).json({'message': 'Meal name already exists'})
+            console.log('Meal name already exists')
+        // error checking for any other error
+        }else{
+            res.status(500).json({'message': 'An error has occured, please try again'})
+            console.log('An error has occured, please try again')
+        }
     }
 })
 
 // delete meal
-app.delete('/delete_meal', async (req, res) => {
-    res.send({'message': 'works'})
+app.delete('/delete_meal', verifyJWT, async (req, res) => {
+    // BODY MUST BE { _id: meal_id }
+
+    try{
+        const meal_id = req.body._id;
+        const creator_id = await Meal.findById(meal_id)
+
+        // checking if the req.id which comes from verifyJWT is the same as the creator of the meal
+        if(req.id !== creator_id.creator){
+            throw new Error('User is not authorized to delete this meal')
+        }
+
+        // put meal id in the request body as _id
+        const result = await Meal.findByIdAndDelete(meal_id)
+        res.status(200).json({'message': 'Meal deleted successfully'})
+    }catch(e){
+        res.status(500).json({'message': e.message})
+    }
 })
 
 app.listen(5000, () => {

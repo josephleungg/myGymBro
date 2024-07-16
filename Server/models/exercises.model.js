@@ -16,7 +16,7 @@ const ExercisesSchema = mongoose.Schema({
     },
     primaryMuscle: {
         type: String,
-        default: 'None',
+        required: [true, 'Please select a primary muscle'],
     },
     otherMuscles: {
         type: Array,
@@ -24,7 +24,7 @@ const ExercisesSchema = mongoose.Schema({
     },
     equipment: {
         type: String,
-        default: 'None',
+        required: [true, 'Please select an equipment type']
     },
     isVisible: {
         type: Boolean,
