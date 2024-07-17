@@ -1,6 +1,8 @@
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native'
+import { router } from 'expo-router'
 import { useState, useEffect } from 'react';
 import { IP_ADDRESS } from '@env';
+import icons from "../../../helper/icons.js"
 
 
 export default function ExerciseList() {
@@ -45,13 +47,22 @@ export default function ExerciseList() {
     <SafeAreaView className="bg-primary">
       <ScrollView className="h-full">
 
-      {/* search section */}
+      {/* header with plus button */}
       <View className="mt-4 px-6 items-center">
-        <Text className="mb-4 text-white text-lg font-pregular">Exercise List</Text>
+      <View className="flex-row justify-between items-center w-full mb-4">
+        {/* left spacer */}
+        <View className="flex-1" /> 
 
+        <Text className="text-white text-lg font-pregular flex-1 items-center">Exercise List</Text>
+
+        <TouchableOpacity className="flex-1 items-end" onPress={() => router.push('/exercises/create-exercise')}>
+          <Text className="text-white text-xl">+</Text>
+        </TouchableOpacity>
+      </View>
+        
         {/* search bar */}
         <TextInput
-          className="w-full h-12 px-4 bg-black-100 rounded-2xl text-white font-psemibold"
+          className="w-full h-12 px-4 mb-4 bg-black-100 rounded-2xl text-white font-psemibold"
           placeholder="Search exercises..."
           placeholderTextColor="#999"
           value={searchQuery}
@@ -76,13 +87,20 @@ export default function ExerciseList() {
         {isLoading ? (<Text className="text-white">Loading List</Text>) : errorMessage ? 
         (<Text className="text-white">{errorMessage}</Text>) : 
         (filteredExercises.map((exercise, index) => (
-            <TouchableOpacity key={index} className="my-2">
-              <Text key={index} className="text-white">{exercise.name}</Text>
+            <TouchableOpacity key={index} className="my-2 flex-1 flex-row" onPress={() => router.push({pathname: "/exercises/[id]", params: { id: exercise._id}})}>
+              <Image
+                className="h-12 w-12 rounded-full self-center bg-white"
+                source={icons[exercise.equipment]}
+              />
+              <View className="h-full ml-4 justify-center">
+                <Text className="text-white text-lg">{exercise.name}</Text>
+                <Text className="text-[#999]">{exercise.primaryMuscle}</Text>
+              </View>
             </TouchableOpacity>
           ))
         )}
       </View>
-      
+
       </ScrollView>
     </SafeAreaView>
   )

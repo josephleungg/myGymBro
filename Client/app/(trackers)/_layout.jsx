@@ -9,6 +9,7 @@ export default function _layout() {
       <Stack>
         <Stack.Screen name="exercises/[id]" options={{ headerShown: false }} />
         <Stack.Screen name="exercises/exercise-list" options={{ headerShown: false }} />
+        <Stack.Screen name="exercises/create-exercise" options={{ headerShown: false }} />
         <Stack.Screen name="meals/[id]" options={{ headerShown: false }} />
         <Stack.Screen name="meals/meal-list" options={{ headerShown: false }} />
         <Stack.Screen name="workouts/[id]" options={{ headerShown: false }} />
