@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, Button } from 'react-native'
+import { View, Text, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import { Link, router } from 'expo-router'
 import { useGlobalContext } from '../../context/GlobalProvider.js';

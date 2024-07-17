@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { IP_ADDRESS } from '@env';
 import icons from "../../../helper/icons.js"
 
-
 export default function ExerciseList() {
   const [errorMessage, setErrorMessage] = useState('');
   const [exercises, setExercises] = useState([]);
@@ -25,7 +24,6 @@ export default function ExerciseList() {
         })
         const data = await res.json()
         setExercises(Object.values(data))
-        console.log(Object.values(data))
         setIsLoading(false)
       }catch(e){
         console.log('Error:', e);
@@ -35,6 +33,7 @@ export default function ExerciseList() {
     fetchedData();
   }, [])
 
+  // Filter exercises whenever the search query changes
   useEffect(() => {
     // Filter exercises whenever the search query changes
     const filtered = exercises.filter(exercise =>
