@@ -8,6 +8,9 @@ export default function GlobalProvider({ children }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [needsRefresh, setNeedsRefresh] = useState(false);
+    const [exerciseRefresh, setExerciseRefresh] = useState(false);
+    const [mealsRefresh, setMealsRefresh] = useState(false);
 
     // user data states
     const [ username, setUsername ] = useState('');
@@ -95,6 +98,12 @@ export default function GlobalProvider({ children }) {
                 setProperties,
                 dateCreated,
                 setDateCreated,
+                needsRefresh,
+                setNeedsRefresh,
+                exerciseRefresh,
+                setExerciseRefresh,
+                mealsRefresh,
+                setMealsRefresh
             }}
         >
             { children }

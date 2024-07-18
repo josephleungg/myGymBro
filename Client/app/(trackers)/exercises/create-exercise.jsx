@@ -1,12 +1,17 @@
 import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Button, Alert } from 'react-native'
+import {Picker} from '@react-native-picker/picker';
 import { SelectList, MultipleSelectList } from 'react-native-dropdown-select-list'
 import FormField from '../../../components/formfield.jsx'
+import { IP_ADDRESS } from '@env';
+import { router } from 'expo-router'
+import { useGlobalContext } from '../../../context/GlobalProvider.js';
 import icons from '../../../helper/icons.js'
 import { useState } from 'react'
 
 export default function CreateExercise() {
-    const [properties, setProperties] = useState({})
+    const [properties, setProperties] = useState({isVisible: false})
     const [otherMuscles, setOtherMuscles] = useState([])
+    const {exerciseRefresh, setExerciseRefresh} = useGlobalContext();
 
     const equipmentData = [
         {key: '1', value:'none'},
@@ -41,11 +46,36 @@ export default function CreateExercise() {
         {key: '21', value:'other'},
     ]
 
+    // function to save the exercise to the database
+    const createSubmit = async () => {
+        const updatedProperties = {...properties, otherMuscles: otherMuscles}
+        try{
+            const res = await fetch(IP_ADDRESS + 'create_exercise',
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedProperties)
+                }
+            )
+
+            if(res.status !== 200){
+                const errorMessage = await res.json()
+                throw new Error(errorMessage.message);
+            }
+            setExerciseRefresh(!exerciseRefresh)
+            router.back()
+        }catch(e){
+            Alert.alert('Error ',e.message)
+        }
+    }
+
     return (
         <SafeAreaView className="bg-primary">
             <ScrollView className="h-full p-6">
                 <View className="items-center">
-                    <Text className="text-white">Testing</Text>
+                    <Text className="text-white text-lg font-pregular">Create an exercise</Text>
                 </View>
 
                 <FormField 
@@ -106,17 +136,24 @@ export default function CreateExercise() {
                     dropdownTextStyles={{color: "white", marginBottom: 10, fontSize: 16, fontFamily: "Poppins-Regular"}}
                 />
 
-                <Button 
-                title="test properties"
-                onPress={() => console.log(properties)}
-                />
+                <Text className="text-base text-gray-100 font-pmedium text-sm mt-10">Public Visibility</Text>
+                <Picker
+                    selectedValue={properties.isVisible}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setProperties({...properties, isVisible: itemValue})
+                    }
+                    itemStyle={{ color: 'white', fontSize: 20 }}
+                    >
+                    <Picker.Item label="Private" value={false} />
+                    <Picker.Item label="Public" value={true} />
+                </Picker>
 
-                <Button 
-                className="mb-10"
-                title="test other muscles"
-                onPress={() => console.log(otherMuscles)}
-                />
-
+                <View className="pb-20">
+                    <TouchableOpacity className="bg-green-400 py-4 rounded-3xl items-center" onPress={createSubmit}>
+                        <Text className="text-black font-pmedium">Create Exercise</Text>
+                    </TouchableOpacity>
+                </View>
+                
             </ScrollView>
         </SafeAreaView>
     )

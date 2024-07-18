@@ -92,7 +92,7 @@ export default function Profile() {
                 <Text className="text-white text-md font-psemibold">Exercise List</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity className="flex-1 bg-[#2e2e48] py-5 mr-4 rounded-3xl items-center" onPress={() => console.log("Meals List Works")}>
+              <TouchableOpacity className="flex-1 bg-[#2e2e48] py-5 mr-4 rounded-3xl items-center" onPress={() => router.push("/meals/meal-list")}>
                 <Text className="text-white text-md font-psemibold">Meals List</Text>
               </TouchableOpacity>
           </View>

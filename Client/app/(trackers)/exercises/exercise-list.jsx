@@ -2,6 +2,7 @@ import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Imag
 import { router } from 'expo-router'
 import { useState, useEffect } from 'react';
 import { IP_ADDRESS } from '@env';
+import { useGlobalContext } from '../../../context/GlobalProvider.js';
 import icons from "../../../helper/icons.js"
 
 export default function ExerciseList() {
@@ -10,6 +11,7 @@ export default function ExerciseList() {
   const [isLoading, setIsLoading] = useState(true); // Initialize loading state
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredExercises, setFilteredExercises] = useState([]);
+  const {exerciseRefresh, setExerciseRefresh} = useGlobalContext();
 
   // fetching exercises data on load
   useEffect(() => {
@@ -31,7 +33,7 @@ export default function ExerciseList() {
       }
     }
     fetchedData();
-  }, [])
+  }, [exerciseRefresh])
 
   // Filter exercises whenever the search query changes
   useEffect(() => {

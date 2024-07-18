@@ -279,7 +279,7 @@ app.delete('/delete_exercise', verifyJWT, async (req, res) => {
             throw new Error('User is not authorized to delete this exercise')
         }
 
-        // put meal id in the request body as _id
+        // put exercise id in the request body as _id
         await Exercise.findByIdAndDelete(exercise_id)
         res.status(200).json({'message': 'Exercise deleted successfully'})
     }catch(e){
