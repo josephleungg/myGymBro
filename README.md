@@ -32,6 +32,7 @@ Express.js
 ### Work in progress
 
 - Fitness/Meal Tracker
+- Allow users to delete their own exercise/meal
 - AI Workout/Meal Plan Generator
 - AI Camera Exercise form checker
 - More Features coming soon...
