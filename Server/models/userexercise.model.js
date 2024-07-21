@@ -11,13 +11,29 @@ const UserExerciseSchema = mongoose.Schema({
         ref: 'Exercise',
         required: true,
     },
+    pastSetWeight: {
+        type: Array,
+        default: [],
+    },
+    pastDates: {
+        type: Array,
+        default: [],
+    },
     personalRecord: {
         type: Number,
         default: 0,
     },
+    personalRecordDate: {
+        type: Date,
+        default: null,
+    },
     oneRepMax: {
         type: Number,
         default: 0,
+    },
+    oneRepMaxDate: {
+        type: Date,
+        default: null,
     },
 })
 

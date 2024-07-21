@@ -5,7 +5,7 @@ import React from 'react'
 export default function ExercisePage() {
     const { id } = useLocalSearchParams()
     return (
-        <View className="h-full bg-primary items-center justify-center">
+        <View className="h-full bg-primary">
             <Text className="text-white">{id}</Text>
         </View>
     )
