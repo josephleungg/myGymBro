@@ -440,12 +440,24 @@ app.patch('/finish_workout', verifyJWT, async (req, res) => {
 
 // save the current workout if the user exits the app before finishing the workout
 app.patch('/save_current_workout', verifyJWT, async (req, res) => {
-    res.send('works')
+    // body must contain the workout session data { workout: array containing the workout info }
+    const currentWorkout = req.body.workout
+    try{
+        const userCurrentWorkout = await User.findByIdAndUpdate(req.id, { $set: { currentWorkout: currentWorkout } })
+        res.status(200).json({'message': 'Current workout saved successfully'})
+    }catch(e){
+        res.status(500).json({'message': e.message})
+    }
 })
 
 // route for getting all of the user's workout sessions
 app.get('/get_workout_sessions', verifyJWT, async (req, res) => {
-    res.send('works')
+    try{
+        const userWorkouts = await User.findById(req.id)
+        res.status(200).json(userWorkouts.daysAtGym)
+    }catch(e){
+        res.status(500).json({'message': e.message})
+    }
 })
 
 app.listen(5000, () => {
