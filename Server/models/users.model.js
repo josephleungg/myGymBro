@@ -49,6 +49,8 @@ const UsersSchema = mongoose.Schema({
         default: 0 
     },
     daysAtGym: { 
+        // Array contains Arrays of an object with a workout that the user has done for the workout
+        // This will contain currentWorkout once the user has finished the workout
         type: Array, 
         default: [] 
     },
@@ -57,8 +59,18 @@ const UsersSchema = mongoose.Schema({
         default: [] 
     },
     currentWorkout: { 
-        type: Array, 
-        default: [] 
+        // *CLEAR THIS ONCE THE USER HAS FINISHED THE WORKOUT*
+        // This will save the workout if the user decides to exit the app before ending the workout
+        // Array contains one object which contains the
+        // Post workout notes: String
+        // Duration: Number of minutes
+        // Exercise Object ID: String ID
+        // Sets: Array of number of reps per set
+        // Weight: Array of weight per set
+        // Date: Date String
+        // ["test", "April 20 2024", {"id": "350983452", "sets": [6,8,10], "weight": [100, 120, 140]}, {"id": "350983452", "sets": [6,8,10], "weight": [190, 100, 160]}]
+        type: Array,
+        default: []
     },
     mealDays: {
         type: Array,

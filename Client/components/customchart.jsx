@@ -1,25 +1,31 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { VictoryLine, VictoryChart } from 'victory';
+import React from "react";
+import { StyleSheet, View, Dimensions } from "react-native";
+import { VictoryLine, VictoryChart, VictoryTheme } from "victory-native";
 
-export default function CustomChart() {
+const fullWidth = Dimensions.get('window').width;
+
+export default function CustomChart({ chartData }) {
   return (
-    <VictoryChart
-        theme={VictoryTheme.material}
-    >
+    <View className="flex-1">
+      <VictoryChart
+        // theme={VictoryTheme.material}
+        style={{
+          }}
+      >
         <VictoryLine
-            style={{
-            data: { stroke: "#c43a31" },
-            parent: { border: "1px solid #ccc"}
-            }}
-            data={[
+          style={{
+            data: { stroke: "#FF9C01" },
+            parent: { border: "10px solid #ccc"}
+          }}
+          data={[
             { x: 1, y: 2 },
             { x: 2, y: 3 },
             { x: 3, y: 5 },
             { x: 4, y: 4 },
             { x: 5, y: 7 }
-            ]}
+          ]}
         />
-    </VictoryChart>
+      </VictoryChart>
+    </View>
   )
 }

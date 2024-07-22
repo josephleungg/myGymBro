@@ -50,6 +50,12 @@ export default function Profile() {
     return monthNames[monthNumber - 1];
   }
 
+  function bttnTest() {
+    const test = ["test", "April 20 2024", {"id": "350983452", "sets": [6,8,10], "weight": [100, 120, 140]}, {"id": "350983452", "sets": [6,8,10], "weight": [190, 100, 160]}]
+
+    console.log(test[2]["sets"])
+  }
+
   return (
     <SafeAreaView className="bg-primary">
       <ScrollView className="h-full">
@@ -103,7 +109,7 @@ export default function Profile() {
             <CustomCalendar />
           </View>
 
-          <Button onPress={() => router.push({pathname: "/workouts/[id]", params: { id: "howcome this doesnt work"}})} title="go to test" />
+          <Button onPress={() => bttnTest()} title="go to test" />
 
         </View>
 

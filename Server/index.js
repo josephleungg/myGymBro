@@ -287,6 +287,18 @@ app.delete('/delete_exercise', verifyJWT, async (req, res) => {
     }
 })
 
+// route to get exercise data
+app.get('/get_exercise', verifyJWT, async (req, res) => {
+    // QUERY STRING MUST BE { id: exercise_id }
+    try{
+        const exercise_id = req.query.id;
+        const exercise = await Exercise.findById(exercise_id)
+        res.status(200).json(exercise)
+    }catch(e){
+        res.status(500).json({'message': e})
+    }
+})
+
 // MEALS DATABASE
 // show all exercises list
 app.get('/meals_list', verifyJWT, async (req, res) => {
@@ -369,6 +381,71 @@ app.delete('/delete_meal', verifyJWT, async (req, res) => {
     }catch(e){
         res.status(500).json({'message': e.message})
     }
+})
+
+// WORKOUT SESSION ROUTES
+// Route for finishing the user's workout session
+app.patch('/finish_workout', verifyJWT, async (req, res) => {
+    // body must contain the workout session data { workout: array containing the workout info }
+    try {
+        // Updating daysAtGym array with the workout session
+        const updateDaysAtGym = await User.findByIdAndUpdate(req.id, { $push: { daysAtGym: req.body.workout } })
+
+        // Clearing the current workout array
+        const clearCurrentWorkout = await User.findByIdAndUpdate(req.id, { $set: { currentWorkout: [] } })
+
+        // checking through all of the exercises in the workout session to see if the user has progressed
+        // also updating the user's set weight for the charts
+        for(let i = 3;i < req.body.workout.length;i++){
+            let updateUserExercises = await UserExercise.findOne({ userID: req.id, exerciseID: req.body.workout[i]["id"] })
+            if(updateUserExercises){
+                const maxWeightInSets = Math.max(...req.body.workout[i]["Weight"])
+                // if the user has done the exercise before
+                // check if the user has progressed
+                // update the user's set weight for the charts
+                updateUserExercises.pastSetWeight = [...updateUserExercises.pastSetWeight, req.body.workout[i]["Weight"]]
+                updateUserExercises.pastSetReps = [...updateUserExercises.pastSetReps, req.body.workout[i]["Sets"]]
+                updateUserExercises.pastDates = [...updateUserExercises.pastDates, req.body.workout[i]["Date"]]
+
+                // update user's PR
+                if(maxWeightInSets > updateUserExercises.personalRecord){
+                    updateUserExercises.personalRecord = maxWeightInSets
+                    updateUserExercises.personalRecordDate = req.body.workout[i]["Date"][0]
+                }
+
+                await updateUserExercises.save()
+            }else{
+                // if the user has not done the exercise before
+                // create a new UserExercise document
+                const newUserExercise = {
+                    userID: req.id,
+                    exerciseID: req.body.workout[i]["id"],
+                    pastSetWeight: [req.body.workout[i]["Weight"]],
+                    pastSetReps: [req.body.workout[i]["Sets"]],
+                    pastDates: [req.body.workout[i]["Date"]],
+                    personalRecord: Math.max(...req.body.workout[i]["Weight"]),
+                    personalRecordDate: req.body.workout[i]["Date"][0]
+                }
+
+                await UserExercise.create(newUserExercise)
+            }
+        }
+
+        console.log('Workout session added to daysAtGym successfully')
+        res.status(200).json({'message': 'Workout session saved successfully'})
+    }catch(e){
+        res.status(500).json({'message': e.message})
+    }
+})
+
+// save the current workout if the user exits the app before finishing the workout
+app.patch('/save_current_workout', verifyJWT, async (req, res) => {
+    res.send('works')
+})
+
+// route for getting all of the user's workout sessions
+app.get('/get_workout_sessions', verifyJWT, async (req, res) => {
+    res.send('works')
 })
 
 app.listen(5000, () => {

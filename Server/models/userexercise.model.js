@@ -10,8 +10,13 @@ const UserExerciseSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Exercise',
         required: true,
+        unique: true,
     },
     pastSetWeight: {
+        type: Array,
+        default: [],
+    },
+    pastSetReps: {
         type: Array,
         default: [],
     },
@@ -24,14 +29,6 @@ const UserExerciseSchema = mongoose.Schema({
         default: 0,
     },
     personalRecordDate: {
-        type: Date,
-        default: null,
-    },
-    oneRepMax: {
-        type: Number,
-        default: 0,
-    },
-    oneRepMaxDate: {
         type: Date,
         default: null,
     },
