@@ -293,7 +293,11 @@ app.get('/get_exercise', verifyJWT, async (req, res) => {
     try{
         const exercise_id = req.query.id;
         const exercise = await Exercise.findById(exercise_id)
-        res.status(200).json(exercise)
+        const creatorName = await User.findById(exercise.creator)
+
+        let exerciseObj = exercise.toObject()
+        exerciseObj.creatorName = creatorName.username
+        res.status(200).json(exerciseObj)
     }catch(e){
         res.status(500).json({'message': e})
     }
