@@ -454,7 +454,7 @@ app.patch('/save_current_workout', verifyJWT, async (req, res) => {
     }
 })
 
-// route for getting all of the user's workout sessions
+// route for getting all of the user's workout sessions for the homepage
 app.get('/get_workout_sessions', verifyJWT, async (req, res) => {
     try{
         const userWorkouts = await User.findById(req.id)
@@ -463,6 +463,21 @@ app.get('/get_workout_sessions', verifyJWT, async (req, res) => {
         res.status(500).json({'message': e.message})
     }
 })
+
+// route for getting the user's last workout data for a specific exercise
+app.get('/get_userexercise_info', verifyJWT, async (req, res) => {
+    // query string must contain the exercise id ?id=exercise_id
+    try{
+        const userExercise = await UserExercise.findOne({ userID: req.id, exerciseID: req.query.id })
+        if(userExercise){
+            res.status(200).json(userExercise)
+        }else{
+            res.status(204).json({'message': 'User has not done this exercise before'})
+        }
+    }catch(e){
+        res.status(500).json({'message': e.message})
+    }
+});
 
 app.listen(5000, () => {
     console.log('server is running on port 5000')

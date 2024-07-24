@@ -1,12 +1,42 @@
-import { View, Text, SafeAreaView, ScrollView, Image } from 'react-native'
-import { useLocalSearchParams } from 'expo-router'
+import { View, Text, SafeAreaView, ScrollView, Image, Alert, TouchableOpacity } from 'react-native'
+import { useLocalSearchParams, router } from 'expo-router'
 import { IP_ADDRESS } from '@env';
+import { useGlobalContext } from '../../../context/GlobalProvider.js';
 import icons from "../../../helper/icons.js"
 import { useState, useEffect } from 'react'
 
 export default function ExercisePage() {
     const { id } = useLocalSearchParams()
     const [exerciseData, setExerciseData] = useState({})
+    const [userExerciseStats, setUserExerciseStats] = useState({"pastSetWeight": [], "pastSetReps": [], "pastDates": []})
+
+    // loading states
+    const [isLoading, setIsLoading] = useState(true)
+    const [isCreator, setIsCreator] = useState(false)
+    const { user, exerciseRefresh, setExerciseRefresh } = useGlobalContext();
+
+    // function to delete exercise
+    async function deleteExercise() {
+        try{
+            const res = await fetch(IP_ADDRESS + 'delete_exercise',
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({_id: id})
+                }
+            )
+
+            if(res.status === 200){
+                setExerciseRefresh(!exerciseRefresh)
+                router.back()
+            }
+        }catch(e){
+            console.log(e)
+            Alert.alert("Error", "Failed to delete exercise")
+        }
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,10 +66,36 @@ export default function ExercisePage() {
                 
                 data.otherMuscleGroups = otherMuscleGroups
 
+                // check if user is creator
+                if(data.creator === user){
+                    setIsCreator(true)
+                }
+
+                // grab user exercise data for previous exercise set data
+                const res = await fetch(IP_ADDRESS + 'get_userexercise_info/?id='+id, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+
+                // checking if the user has done this exercise before
+                if(res.status === 204){
+                    console.log("User has not done this exercise yet")
+                }else if(res.status === 200){
+                    const userExerciseData = await res.json()
+
+                    if(userExerciseData.pastSetWeight.length > 4){
+                        setUserExerciseStats({"pastSetWeight": userExerciseData.pastSetWeight.slice(0, 4), "pastSetReps": userExerciseData.pastSetReps.slice(0, 4), "pastDates": userExerciseData.pastDates.slice(0, 4)})
+                    }
+                }
+
                 console.log(data)
                 setExerciseData(data)
+                setIsLoading(false)
             }catch(e){
                 console.log(e)
+                Alert.alert("Error", "Failed to fetch data")
             }
         }
 
@@ -47,6 +103,13 @@ export default function ExercisePage() {
     }, [])
 
     return (
+        isLoading ? (
+        <SafeAreaView className="bg-primary w-full h-full">
+            <View className="justify-center items-center h-full">
+                <Text className="text-gray-100 font-psemibold text-lg">Loading...</Text>
+            </View>
+        </SafeAreaView>
+        ) : (
         <SafeAreaView className="bg-primary">
             <ScrollView className="h-full py-4 px-6">
 
@@ -81,14 +144,41 @@ export default function ExercisePage() {
                 </View>
 
                 {/* chart section */}
-                <View className="">
-                        
+                <View className="pt-8 items-center">
+                    <Text className="text-white font-pregular">Chart Coming Soon...</Text>
                 </View>
 
                 {/* previous workout data */}
-                
+                <View className="pt-8">
+                    <Text className="font-psemibold text-white">Previous Workout Sets</Text>
+
+                    {/* Checker for if the  */}
+                    {userExerciseStats.pastSetWeight.length === 0 ? (
+                        <View className="pt-4 w-full items-center">
+                            <Text className="text-white font-pregular">You haven't done this exercise before :c</Text>
+                        </View>
+                    ) : (
+                        userExerciseStats.pastSetWeight.map((weight, i) => {
+                            <View className="pt-4 flex-row justify-end">
+                                <Text className="text-white font-pregular">{userExerciseStats.pastSetReps[i]} @ {userExerciseStats.pastSetWeight[i]} LBS</Text>
+                                <Text className="text-gray-100 font-pregular">{userExerciseStats.pastDates[i]}</Text>
+                            </View>
+                        })
+                    )
+                    }
+                </View>
+
+                {/* delete button if it is the creator */}
+                {isCreator && (
+                    <View className="pt-8 items-center w-full">
+                        <TouchableOpacity className="bg-red-500 px-4 py-2 rounded-3xl" onPress={() => deleteExercise()}>
+                            <Text className="text-black font-pmedium">Delete Exercise</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
 
             </ScrollView>
         </SafeAreaView>
+        )
     )
 }
