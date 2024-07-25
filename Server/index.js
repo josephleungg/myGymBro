@@ -400,21 +400,21 @@ app.patch('/finish_workout', verifyJWT, async (req, res) => {
 
         // checking through all of the exercises in the workout session to see if the user has progressed
         // also updating the user's set weight for the charts
-        for(let i = 3;i < req.body.workout.length;i++){
+        for(let i = 4;i < req.body.workout.length;i++){
             let updateUserExercises = await UserExercise.findOne({ userID: req.id, exerciseID: req.body.workout[i]["id"] })
             if(updateUserExercises){
-                const maxWeightInSets = Math.max(...req.body.workout[i]["Weight"])
+                const maxWeightInSets = Math.max(...req.body.workout[i]["weight"])
                 // if the user has done the exercise before
                 // check if the user has progressed
                 // update the user's set weight for the charts
-                updateUserExercises.pastSetWeight = [...updateUserExercises.pastSetWeight, req.body.workout[i]["Weight"]]
-                updateUserExercises.pastSetReps = [...updateUserExercises.pastSetReps, req.body.workout[i]["Sets"]]
-                updateUserExercises.pastDates = [...updateUserExercises.pastDates, req.body.workout[i]["Date"]]
+                updateUserExercises.pastSetWeight = [...updateUserExercises.pastSetWeight, req.body.workout[i]["weight"]]
+                updateUserExercises.pastSetReps = [...updateUserExercises.pastSetReps, req.body.workout[i]["sets"]]
+                updateUserExercises.pastDates = [...updateUserExercises.pastDates, req.body.workout[i]["date"]]
 
                 // update user's PR
                 if(maxWeightInSets > updateUserExercises.personalRecord){
                     updateUserExercises.personalRecord = maxWeightInSets
-                    updateUserExercises.personalRecordDate = req.body.workout[i]["Date"][0]
+                    updateUserExercises.personalRecordDate = req.body.workout[i]["date"][0]
                 }
 
                 await updateUserExercises.save()
@@ -424,11 +424,11 @@ app.patch('/finish_workout', verifyJWT, async (req, res) => {
                 const newUserExercise = {
                     userID: req.id,
                     exerciseID: req.body.workout[i]["id"],
-                    pastSetWeight: [req.body.workout[i]["Weight"]],
-                    pastSetReps: [req.body.workout[i]["Sets"]],
-                    pastDates: [req.body.workout[i]["Date"]],
-                    personalRecord: Math.max(...req.body.workout[i]["Weight"]),
-                    personalRecordDate: req.body.workout[i]["Date"][0]
+                    pastSetWeight: [req.body.workout[i]["weight"]],
+                    pastSetReps: [req.body.workout[i]["sets"]],
+                    pastDates: [req.body.workout[i]["date"]],
+                    personalRecord: Math.max(...req.body.workout[i]["weight"]),
+                    personalRecordDate: req.body.workout[i]["date"][0]
                 }
 
                 await UserExercise.create(newUserExercise)
@@ -454,6 +454,16 @@ app.patch('/save_current_workout', verifyJWT, async (req, res) => {
     }
 })
 
+// route for clearing the current workout once the user returns to the workout tracker page
+app.patch('/clear_current_workout', verifyJWT, async (req, res) => {
+    try{
+        const clearCurrentWorkout = await User.findByIdAndUpdate(req.id, { $set: { currentWorkout: [] } })
+        res.status(200).json({'message': 'Current workout cleared successfully'})
+    }catch(e){
+        res.status(500).json({'message': e.message})
+    }
+})
+
 // route for getting all of the user's workout sessions for the homepage
 app.get('/get_workout_sessions', verifyJWT, async (req, res) => {
     try{
@@ -464,7 +474,7 @@ app.get('/get_workout_sessions', verifyJWT, async (req, res) => {
     }
 })
 
-// route for getting the user's last workout data for a specific exercise
+// route for getting the user's last workout data for a specific exercise for individual workout ID page
 app.get('/get_userexercise_info', verifyJWT, async (req, res) => {
     // query string must contain the exercise id ?id=exercise_id
     try{

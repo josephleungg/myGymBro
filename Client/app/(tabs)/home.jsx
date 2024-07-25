@@ -5,7 +5,16 @@ import { IP_ADDRESS } from '@env';
 import React from 'react'
 
 export default function Home () {
-  const { user, username, email, properties, dateCreated, isLoggedIn, setIsLoggedIn, isUpdated, setIsUpdated } = useGlobalContext();
+  const { properties, workoutStarted, setWorkoutStarted } = useGlobalContext();
+
+  // go to workout tracker
+  function startWorkout() {
+    if(workoutStarted === false){
+      setWorkoutStarted(true)
+    }
+
+    router.push('/workouts/workout-tracker')
+  }
 
   return (
     <SafeAreaView className="bg-primary">
@@ -13,17 +22,17 @@ export default function Home () {
 
         {/* Welcome text */}
         <View className='mx-6 mt-12 mb-8'>
-          <Text className='text-white font-pregular text-md'>Welcome {properties.name}</Text>
+          <Text className='text-white font-pregular text-base'>Welcome <Text className="font-pbold">{properties.name}</Text></Text>
         </View>
 
         {/* buttons at the top */}
         <View className="flex-row w-full space-x-4 justify-between mb-20">
-          <TouchableOpacity className="flex-1 bg-secondary py-5 ml-4 rounded-3xl items-center" onPress={() => console.log("Exercise List Works")}>
-            <Text className="text-primary text-md font-psemibold">Workout Tracker</Text>
+          <TouchableOpacity className="flex-1 bg-secondary py-5 ml-4 rounded-3xl items-center" onPress={() => startWorkout()}>
+            <Text className="text-primary text-base font-psemibold">Start Workout</Text>
           </TouchableOpacity>
 
           <TouchableOpacity className="flex-1 bg-secondary py-5 mr-4 rounded-3xl items-center" onPress={() => console.log("Meals List Works")}>
-            <Text className="text-primar text-md font-psemibold">Food Tracker</Text>
+            <Text className="text-primar text-base font-psemibold">Food Tracker</Text>
           </TouchableOpacity>
         </View>
 

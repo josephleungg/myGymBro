@@ -15,6 +15,7 @@ export default function _layout() {
         <Stack.Screen name="meals/create-meal" options={{ headerShown: false }} />
         <Stack.Screen name="workouts/[id]" options={{ headerShown: false }} />
         <Stack.Screen name="workouts/past-workouts" options={{ headerShown: false }} />
+        <Stack.Screen name="workouts/workout-tracker" options={{ headerShown: false }} />
       </Stack>
 
       {/* statusbar customization */}

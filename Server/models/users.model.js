@@ -61,14 +61,17 @@ const UsersSchema = mongoose.Schema({
     currentWorkout: { 
         // *CLEAR THIS ONCE THE USER HAS FINISHED THE WORKOUT*
         // This will save the workout if the user decides to exit the app before ending the workout
-        // Array contains one object which contains the
-        // Post workout notes: String
-        // Duration: Number of minutes
-        // Exercise Object ID: String ID
-        // Sets: Array of number of reps per set
-        // Weight: Array of weight per set
-        // Date: Date String
-        // ["test", "April 20 2024", {"id": "350983452", "sets": [6,8,10], "weight": [100, 120, 140]}, {"id": "350983452", "sets": [6,8,10], "weight": [190, 100, 160]}]
+        // Array contains
+        // workoutName: String
+        // workoutNotes: String
+        // duration: Number of minutes
+        // date: Date String
+        //////////////
+        // OBJECTS //
+        // Exercise Object ID: Arrays of Object ID
+        // sets: Array of number of reps per set
+        // weight: Array of weight per set
+        // ["test", 60, "April 20 2024", {"id": "350983452", "sets": [6,8,10], "weight": [100, 120, 140], "date": [April 20 2024, April 20 2024, April 20 2024]}, {"id": "350983452", "sets": [6,8,10], "weight": [190, 100, 160], "date": [April 20 2024, April 20 2024, April 20 2024]}]
         type: Array,
         default: []
     },
