@@ -75,7 +75,7 @@ export default function SignIn() {
               isLoading={isSubmitting}
             />
 
-            <Button title="Check IP Address in ENV" onPress={() => console.log(IP_ADDRESS)} />
+            {/* <Button title="Check IP Address in ENV" onPress={() => console.log(IP_ADDRESS)} /> */}
 
             {/* sign up for an account text */}
             <View className="justify-center pt-5 flex-row gap-2">

@@ -1,11 +1,13 @@
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native'
-import { router } from 'expo-router'
+import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image, Touchable } from 'react-native'
+import { useLocalSearchParams, router } from 'expo-router'
 import { useState, useEffect } from 'react';
 import { IP_ADDRESS } from '@env';
 import { useGlobalContext } from '../../../context/GlobalProvider.js';
 import icons from "../../../helper/icons.js"
+import images from "../../../helper/images.js"
 
 export default function ExerciseList() {
+  const { addWorkout } = useLocalSearchParams();
   const [errorMessage, setErrorMessage] = useState('');
   const [exercises, setExercises] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // Initialize loading state
@@ -52,7 +54,14 @@ export default function ExerciseList() {
       <View className="mt-4 px-6 items-center">
       <View className="flex-row justify-between items-center w-full mb-4">
         {/* left spacer */}
-        <View className="flex-1" /> 
+        <View className="flex-1">
+          <TouchableOpacity onPress={() => router.back()}>
+            <Image 
+              className="h-4 w-6"
+              source={images.backArrow}
+            />
+          </TouchableOpacity>
+        </View> 
 
         <Text className="text-white text-lg font-pregular flex-1 items-center">Exercise List</Text>
 
@@ -88,7 +97,7 @@ export default function ExerciseList() {
         {isLoading ? (<Text className="text-white">Loading List</Text>) : errorMessage ? 
         (<Text className="text-white">{errorMessage}</Text>) : 
         (filteredExercises.map((exercise, index) => (
-            <TouchableOpacity key={index} className="my-2 flex-1 flex-row" onPress={() => router.push({pathname: "/exercises/[id]", params: { id: exercise._id}})}>
+            <TouchableOpacity key={index} className="my-2 flex-1 flex-row" onPress={() => router.push({pathname: "/exercises/[id]", params: { id: exercise._id, addWorkout: addWorkout }})}>
               <Image
                 className="h-12 w-12 rounded-full self-center bg-white"
                 source={icons[exercise.equipment]}

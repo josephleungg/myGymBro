@@ -3,10 +3,11 @@ import { useLocalSearchParams, router } from 'expo-router'
 import { IP_ADDRESS } from '@env';
 import { useGlobalContext } from '../../../context/GlobalProvider.js';
 import icons from "../../../helper/icons.js"
+import images from "../../../helper/images.js"
 import { useState, useEffect } from 'react'
 
 export default function ExercisePage() {
-    const { id } = useLocalSearchParams()
+    const { id, addWorkout } = useLocalSearchParams()
     const [exerciseData, setExerciseData] = useState({})
     const [userExerciseStats, setUserExerciseStats] = useState({"pastSetWeight": [], "pastSetReps": [], "pastDates": []})
 
@@ -112,7 +113,14 @@ export default function ExercisePage() {
         ) : (
         <SafeAreaView className="bg-primary">
             <ScrollView className="h-full py-4 px-6">
-
+                <View>
+                    <TouchableOpacity onPress={() => router.back()}>
+                        <Image 
+                            className="h-4 w-6"
+                            source={images.backArrow}
+                        />
+                    </TouchableOpacity>
+                </View>
                 {/* header */}
                 <View className="items-center">
                     <Text className="text-white font-psemibold text-lg">{exerciseData.name}</Text>
@@ -167,10 +175,21 @@ export default function ExercisePage() {
                     )
                     }
                 </View>
+                
+                <View className="pt-8"></View>
+
+                {/* add workout button for users currently creating a workout */}
+                {addWorkout && (
+                    <View className="pb-4 items-center w-full">
+                        <TouchableOpacity className="bg-green-500 px-4 py-2 rounded-3xl" onPress={() => router.navigate({pathname: "/workouts/workout-tracker", params: { exerciseID: exerciseData._id, name: exerciseData.name, equipment: exerciseData.equipment }})}>
+                            <Text className="text-black font-pmedium">Add Exercise</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
 
                 {/* delete button if it is the creator */}
-                {isCreator && (
-                    <View className="pt-8 items-center w-full">
+                {(isCreator && !addWorkout) && (
+                    <View className="items-center w-full">
                         <TouchableOpacity className="bg-red-500 px-4 py-2 rounded-3xl" onPress={() => deleteExercise()}>
                             <Text className="text-black font-pmedium">Delete Exercise</Text>
                         </TouchableOpacity>

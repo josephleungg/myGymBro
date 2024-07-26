@@ -3,6 +3,7 @@ import primaryBGLogo from '../assets/logo/gymbro-primary-bg.png';
 import blackBGLogo from '../assets/logo/gymbro-black-bg.png';
 import eye from '../assets/icons/eye.png';
 import eyeHide from '../assets/icons/eye-hide.png';
+import backArrow from '../assets/icons/left-arrow.png';
 
 export default {
     transBGLogo,
@@ -10,4 +11,5 @@ export default {
     blackBGLogo,
     eye,
     eyeHide,
+    backArrow,
 };
