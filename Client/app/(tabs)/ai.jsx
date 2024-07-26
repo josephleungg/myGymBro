@@ -5,6 +5,7 @@ import { useGlobalContext } from '../../context/GlobalProvider.js';
 
 export default function AI () {
   const { user, properties, setProperties, workoutStarted, setWorkoutStarted } = useGlobalContext();
+  const test = ["testname", "testDescription", 60, "April 20 2024", {"id": "1234", "sets": [0,1,2]}]
   const [count, setCount] = useState(0)
 
   return (
@@ -22,6 +23,8 @@ export default function AI () {
       <TouchableOpacity onPress={() => console.log(properties)}>
         <Text className="text-white">test properties</Text>
       </TouchableOpacity>
+
+      <Text className="text-white text-lg font-pregular">{test[4].id}</Text>
 
     </SafeAreaView>
   )

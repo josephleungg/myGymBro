@@ -20,6 +20,7 @@ export default function GlobalProvider({ children }) {
 
     // workout tracker states
     const [ workoutStarted, setWorkoutStarted ] = useState(false);
+    const [ savedWorkoutDetails, setSavedWorkoutDetails ] = useState(["", "", 0, new Date()]);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -108,7 +109,9 @@ export default function GlobalProvider({ children }) {
                 mealsRefresh,
                 setMealsRefresh,
                 workoutStarted,
-                setWorkoutStarted
+                setWorkoutStarted,
+                savedWorkoutDetails,
+                setSavedWorkoutDetails
             }}
         >
             { children }
