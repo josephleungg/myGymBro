@@ -127,8 +127,10 @@ export default function WorkoutTracker() {
             })
 
             const data = await res.json()
-
-            setProperties({...properties, daysAtGym: [...properties.daysAtGym, workoutDetails]})
+            
+            let modifiedWorkoutDetails = workoutDetails
+            modifiedWorkoutDetails[2] = Math.floor(elapsedTime / 1000)
+            setProperties({...properties, daysAtGym: [...properties.daysAtGym, modifiedWorkoutDetails]})
             setSavedWorkoutDetails(["", "", 0, new Date()])
             resetTimer()
             router.navigate("/home")
