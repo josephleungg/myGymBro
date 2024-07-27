@@ -8,6 +8,8 @@ import barbell from "../assets/trackers-imgs/barbell.png";
 import machine from "../assets/trackers-imgs/machine.png";
 import dumbbell from "../assets/trackers-imgs/dumbbell.png";
 import other from "../assets/trackers-imgs/other.png";
+import play from "../assets/icons/play.png";
+import pause from "../assets/icons/pause.png";
 
 export default {
     home,
@@ -20,4 +22,6 @@ export default {
     machine,
     dumbbell,
     other,
+    play,
+    pause,
 };

@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image, Touchable } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, TextInput, Image, Alert } from 'react-native'
 import { useLocalSearchParams, router } from 'expo-router'
 import React, { useState, useEffect } from 'react';
 import { IP_ADDRESS } from '@env';
@@ -8,7 +8,22 @@ import icons from "../../../helper/icons.js"
 import images from "../../../helper/images.js"
 
 export default function WorkoutTracker() {
-    const { user, properties, setProperties, workoutStarted, setWorkoutStarted, savedWorkoutDetails, setSavedWorkoutDetails } = useGlobalContext();
+    const { user, 
+            properties, 
+            setProperties, 
+            workoutStarted, 
+            setWorkoutStarted, 
+            savedWorkoutDetails, 
+            setSavedWorkoutDetails, 
+            timerStarted, 
+            setTimerStarted, 
+            startTime, 
+            setStartTime, 
+            elapsedTime, 
+            setElapsedTime, 
+            startTimer, 
+            stopTimer, 
+            resetTimer} = useGlobalContext();
     const { exerciseID, name, equipment } = useLocalSearchParams();
     // workoutName: String
     // workoutNotes: String
@@ -24,12 +39,13 @@ export default function WorkoutTracker() {
     // {"id": "350983452", "sets": [6,8,10], "weight": [190, 100, 160], "date": [April 20 2024, April 20 2024, April 20 2024]}]
     const [ workoutDetails, setWorkoutDetails ] = useState(["", "", 0, new Date()]);
 
-    // keep workout details persisted whenever user leaves the page
+    // keep workout details persisted whenever user leaves the page because the page remounts components when user navigates back
+    // **don't have to do this if i just remove workoutDetails but too lazy to remove it
     useEffect(() => {
         setSavedWorkoutDetails(workoutDetails)
     }, [workoutDetails])
 
-    // clear the current workout
+    // clear the current workout after coming back from a saved workout
     async function clearCurrentWorkout(){
         try{
             const res = await fetch(IP_ADDRESS + 'clear_current_workout', {
@@ -58,9 +74,31 @@ export default function WorkoutTracker() {
         if(exerciseID){
             setWorkoutDetails([... workoutDetails, {"id": exerciseID, "name": name, "equipment": equipment, "sets": [0], "weight": [0], "date": [new Date()]}])
         }
-        // NEED TO APPEND THIS TO THE WORKOUT DETAILS ARRAY AS A NEW EXERCISE AND THEN FIGURE OUT A WAY TO INDEX THEM INDIVIDUALLY
  
     }, [workoutStarted, exerciseID])
+
+    // function for deleting workout session
+    function alertDeleteWorkout(){
+        Alert.alert(
+            "Delete Workout",
+            "Are you sure you want to delete this workout?",
+            [
+                { text: "Cancel", onPress: () => null, style: "cancel" },
+                { text: "Confirm", onPress: () => deleteWorkout(), style: "destructive" }
+            ]
+        )
+    }
+
+    function finishWorkout(){
+        console.log("done")
+    }
+
+    function deleteWorkout(){
+        setSavedWorkoutDetails(["", "", 0, new Date()])
+        setWorkoutStarted(false)
+        resetTimer()
+        router.navigate("/home")
+    }
 
     // functions for mapping exercises
     // function for deleting a set
@@ -80,68 +118,108 @@ export default function WorkoutTracker() {
                     <Text className="text-white text-lg font-pregular">Workout is not started!</Text>
                 </View>
             ) : (
-                <ScrollView className="h-full py-4 px-6">
+                <ScrollView className="h-full pb-4 px-6">
                     {/* back button */}
-                    <View>
-                        <TouchableOpacity onPress={() => console.log(workoutDetails)}>
-                            <Text className="text-white">Show Button</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => router.navigate("/home")}>
+                    <View className="flex-row">
+                        <TouchableOpacity onPress={() => router.navigate("/home")} className="flex-1 pr-4 py-4">
                             <Image 
                                 className="h-4 w-6"
                                 source={images.backArrow}
                             />
                         </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => finishWorkout()} className="pl-4 py-4">
+                            <Text className="text-blue-500 font-pbold">Finish</Text>
+                        </TouchableOpacity>
+
+                        {/* <TouchableOpacity onPress={() => console.log(workoutDetails)}>
+                            <Text className="text-white">Show Button</Text>
+                        </TouchableOpacity> */}
                     </View>
 
                     {/* header */}
                     <View className="items-center mb-8">
-                        <Text className="text-white font-psemibold text-base pb-4">Workout Tracker</Text>
-
+                        <Text className="text-white font-psemibold text-lg pb-4">Workout Tracker</Text>
 
                         {/* add a workout name */}
-                        <TextInput 
-                            style={{
-                                height: 40,
-                                borderBottomColor: 'gray',
-                                borderBottomWidth: 1,
-                                color: 'white',
-                                paddingHorizontal: 10
-                            }}
-                            className="font-pregular"
-                            placeholder="Add Workout Name"
-                            placeholderTextColor="gray"
-                            onChangeText={e => setWorkoutDetails([e, ...workoutDetails.slice(1)])}
-                        />
+                        <View className="pb-4">
+                            <TextInput 
+                                style={{
+                                    height: 40,
+                                    borderBottomColor: 'gray',
+                                    borderBottomWidth: 1,
+                                    color: 'white',
+                                    paddingHorizontal: 10
+                                }}
+                                className="font-pregular"
+                                placeholder="Add Workout Name"
+                                placeholderTextColor="gray"
+                                value={workoutDetails[0]}
+                                onChangeText={e => setWorkoutDetails([e, ...workoutDetails.slice(1)])}
+                            />
 
-                        {/* add a description text */}
-                        <TextInput 
-                            style={{
-                                height: 40,
-                                borderBottomColor: 'gray',
-                                borderBottomWidth: 1,
-                                color: 'white',
-                                paddingHorizontal: 10
-                            }}
-                            className="font-pregular"
-                            placeholder="Add Workout Notes"
-                            placeholderTextColor="gray"
-                            onChangeText={e => setWorkoutDetails([workoutDetails[0], e, ...workoutDetails.slice(2)])}
-                        />
+                            {/* add a description text */}
+                            <TextInput 
+                                style={{
+                                    height: 40,
+                                    borderBottomColor: 'gray',
+                                    borderBottomWidth: 1,
+                                    color: 'white',
+                                    paddingHorizontal: 10
+                                }}
+                                className="font-pregular"
+                                placeholder="Add Workout Notes"
+                                placeholderTextColor="gray"
+                                value={workoutDetails[1]}
+                                onChangeText={e => setWorkoutDetails([workoutDetails[0], e, ...workoutDetails.slice(2)])}
+                            />
+                        </View>
+
+                        {/* Timer section */}
+                        <View className="flex-row space-x-6">
+                            <View className="flex-1">
+                                <Text className="text-white font-pregular text-base">Duration: {Math.floor(elapsedTime / 1000)}</Text>
+                            </View>
+                            
+                            <TouchableOpacity onPress={startTimer}>
+                                <Image
+                                    className="h-4 w-4"
+                                    source={icons.play}
+                                />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={stopTimer}>
+                                <Image
+                                    className="h-4 w-4"
+                                    source={icons.pause}
+                                />
+                            </TouchableOpacity>
+                        </View>
 
                         <View className="pb-6"></View>
 
-                        {/* add execise button */}
-                        <TouchableOpacity
-                            onPress={() => router.push({pathname: "/exercises/exercise-list", params: { addWorkout: true }})}
-                            className="bg-secondary px-6 py-2 rounded-3xl"
-                        >
-                            <Text className="font-psemibold text-base">Add Exercise</Text>
-                        </TouchableOpacity>
+                        {/* top buttons */}
+                        <View className="flex-row justify-between space-x-6">
+                            {/* add exercise button */}
+                            <TouchableOpacity
+                                onPress={() => router.push({pathname: "/exercises/exercise-list", params: { addWorkout: true }})}
+                                className="bg-secondary py-3 rounded-3xl flex-1 items-center"
+                            >
+                                <Text className="font-psemibold text-base">Add Exercise</Text>
+                            </TouchableOpacity>
+
+                            {/* delete workout button */}
+                            <TouchableOpacity
+                                onPress={() => alertDeleteWorkout()}
+                                className="bg-red-500 py-3 rounded-3xl flex-1 items-center"
+                            >
+                                <Text className="font-psemibold text-base">Delete Workout</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
 
                     {/* exercise details */}
-                    <View className="h-full">
+                    <View className="h-full mb-10">
                         {workoutDetails.slice(4).map((exercise, index) => (
                             <React.Fragment key={`exercise-${index}`}>
                                 {/* equipment and exercise name */}
@@ -199,7 +277,7 @@ export default function WorkoutTracker() {
                                                 />
                                             </View>
 
-                                            {/* delete button */}
+                                            {/* delete button, last set deleted will delete whole exercise from the list */}
                                             <View className="justify-center">
                                                 <TouchableOpacity
                                                     className="bg-red-500 px-2 py-3 rounded-3xl"
@@ -215,7 +293,7 @@ export default function WorkoutTracker() {
                                 {/* add set button */}
                                 <View className="items-center pb-4">
                                     <TouchableOpacity
-                                        onPress={() => setWorkoutDetails([...workoutDetails.slice(0, index+4), {...exercise, sets: [...exercise.sets, 0], weight: [...exercise.weight, 0], date: [...exercise.date, new Date()]}])}
+                                        onPress={() => setWorkoutDetails([...workoutDetails.slice(0, index+4), {...exercise, sets: [...exercise.sets, 0], weight: [...exercise.weight, 0], date: [...exercise.date, new Date()]}, ...workoutDetails.slice(index+5)])}
                                         className="bg-secondary px-12 py-2 rounded-3xl"
                                     >
                                         <Text className="font-psemibold text-base">Add Set</Text>
@@ -224,8 +302,6 @@ export default function WorkoutTracker() {
                             </React.Fragment>
                         ))}
                     </View>
-                
-                <View className="mb-10"></View>
                 </ScrollView>
             )}
         </SafeAreaView>

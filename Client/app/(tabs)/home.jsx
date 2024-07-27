@@ -5,11 +5,12 @@ import { IP_ADDRESS } from '@env';
 import React from 'react'
 
 export default function Home () {
-  const { properties, workoutStarted, setWorkoutStarted } = useGlobalContext();
+  const { properties, workoutStarted, setWorkoutStarted, startTimer } = useGlobalContext();
 
   // go to workout tracker
   function startWorkout() {
     if(workoutStarted === false){
+      startTimer()
       setWorkoutStarted(true)
     }
 

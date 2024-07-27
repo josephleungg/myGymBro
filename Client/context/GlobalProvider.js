@@ -21,7 +21,11 @@ export default function GlobalProvider({ children }) {
     // workout tracker states
     const [ workoutStarted, setWorkoutStarted ] = useState(false);
     const [ savedWorkoutDetails, setSavedWorkoutDetails ] = useState(["", "", 0, new Date()]);
+    const [ timerStarted, setTimerStarted ] = useState(false);
+    const [ startTime, setStartTime ] = useState(0);
+    const [ elapsedTime, setElapsedTime ] = useState(0);
 
+    // useEffect to check if the user is logged in and grab all the user info for the whole app
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -86,6 +90,39 @@ export default function GlobalProvider({ children }) {
         fetchUserData()
     }, [isLoggedIn])
 
+    // timer functions for workout tracker
+    const startTimer = () => {
+        if (!timerStarted) {
+            setStartTime(Date.now() - elapsedTime);
+            setTimerStarted(true);
+        }
+    };
+
+    const stopTimer = () => {
+        if (timerStarted) {
+            setElapsedTime(Date.now() - startTime);
+            setTimerStarted(false);
+        }
+    };
+
+    const resetTimer = () => {
+        setTimerStarted(false);
+        setStartTime(0);
+        setElapsedTime(0);
+    };
+
+    useEffect(() => {
+        let timerInterval;
+        if (timerStarted) {
+            timerInterval = setInterval(() => {
+                setElapsedTime(Date.now() - startTime);
+            }, 1000);
+        } else if (!timerStarted && elapsedTime !== 0) {
+            clearInterval(timerInterval);
+        }
+        return () => clearInterval(timerInterval);
+    }, [timerStarted, startTime]);
+
     return(
         <GlobalContext.Provider
             value={{
@@ -111,7 +148,16 @@ export default function GlobalProvider({ children }) {
                 workoutStarted,
                 setWorkoutStarted,
                 savedWorkoutDetails,
-                setSavedWorkoutDetails
+                setSavedWorkoutDetails,
+                timerStarted,
+                setTimerStarted,
+                startTime,
+                setStartTime,
+                elapsedTime,
+                setElapsedTime,
+                startTimer,
+                stopTimer,
+                resetTimer,
             }}
         >
             { children }
