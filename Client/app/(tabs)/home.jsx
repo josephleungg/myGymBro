@@ -73,13 +73,13 @@ export default function Home () {
               </TouchableOpacity>
             </View>
           );
-        })}
+          })}
 
-        {properties.daysAtGym.length > 0 && (
-          <TouchableOpacity className="self-center bg-[#e2e2f7] py-3 px-4 rounded-3xl" onPress={() => router.push('/trackers')}>
-            <Text className="text-black font-psemibold text-base">View More</Text>
-          </TouchableOpacity>
-        )}
+          {properties.daysAtGym.length > 0 && (
+            <TouchableOpacity className="self-center bg-[#e2e2f7] py-3 px-4 rounded-3xl" onPress={() => router.push('/trackers')}>
+              <Text className="text-black font-psemibold text-base">View More</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
       </ScrollView>
