@@ -8,8 +8,7 @@ import icons from "../../../helper/icons.js"
 import images from "../../../helper/images.js"
 
 export default function WorkoutTracker() {
-    const { user, 
-            properties, 
+    const { properties, 
             setProperties, 
             workoutStarted, 
             setWorkoutStarted, 
@@ -77,6 +76,16 @@ export default function WorkoutTracker() {
  
     }, [workoutStarted, exerciseID])
 
+    // functions for mapping exercises
+    // function for deleting a set
+    function deleteSet(exerciseIndex, setIndex){
+        if(workoutDetails[exerciseIndex].sets.length === 1){
+            setWorkoutDetails([...workoutDetails.slice(0, exerciseIndex), ...workoutDetails.slice(exerciseIndex+1)])
+        }else{
+            setWorkoutDetails([...workoutDetails.slice(0, exerciseIndex), {...workoutDetails[exerciseIndex], sets: workoutDetails[exerciseIndex].sets.filter((set, index) => index !== setIndex), weight: workoutDetails[exerciseIndex].weight.filter((weight, index) => index !== setIndex), date: workoutDetails[exerciseIndex].date.filter((date, index) => index !== setIndex)}, ...workoutDetails.slice(exerciseIndex+1)])
+        }
+    }
+
     // function for deleting workout session
     function alertDeleteWorkout(){
         Alert.alert(
@@ -89,10 +98,6 @@ export default function WorkoutTracker() {
         )
     }
 
-    function finishWorkout(){
-        console.log("done")
-    }
-
     function deleteWorkout(){
         setSavedWorkoutDetails(["", "", 0, new Date()])
         setWorkoutStarted(false)
@@ -100,13 +105,38 @@ export default function WorkoutTracker() {
         router.navigate("/home")
     }
 
-    // functions for mapping exercises
-    // function for deleting a set
-    function deleteSet(exerciseIndex, setIndex){
-        if(workoutDetails[exerciseIndex].sets.length === 1){
-            setWorkoutDetails([...workoutDetails.slice(0, exerciseIndex), ...workoutDetails.slice(exerciseIndex+1)])
-        }else{
-            setWorkoutDetails([...workoutDetails.slice(0, exerciseIndex), {...workoutDetails[exerciseIndex], sets: workoutDetails[exerciseIndex].sets.filter((set, index) => index !== setIndex), weight: workoutDetails[exerciseIndex].weight.filter((weight, index) => index !== setIndex), date: workoutDetails[exerciseIndex].date.filter((date, index) => index !== setIndex)}, ...workoutDetails.slice(exerciseIndex+1)])
+    // function for finishing workout
+    function alertFinishWorkout(){
+        Alert.alert(
+            "Finish Workout",
+            "Are you sure you want to finish this workout?",
+            [
+                { text: "Cancel", onPress: () => null, style: "cancel" },
+                { text: "Confirm", onPress: () => {stopTimer(); finishWorkout()}, style: "destructive" }
+            ])
+    }
+
+    async function finishWorkout(){
+        try{
+            const res = await fetch(IP_ADDRESS + 'finish_workout', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({workout: workoutDetails, duration: Math.floor(elapsedTime / 1000)})
+            })
+
+            const data = await res.json()
+
+            setProperties({...properties, daysAtGym: [...properties.daysAtGym, workoutDetails]})
+            setSavedWorkoutDetails(["", "", 0, new Date()])
+            resetTimer()
+            router.navigate("/home")
+            setWorkoutStarted(false)
+
+            console.log(data.message)
+        }catch(e){
+            Alert.alert("Error", "There was an error saving the workout")
         }
     }
 
@@ -128,10 +158,11 @@ export default function WorkoutTracker() {
                             />
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => finishWorkout()} className="pl-4 py-4">
+                        <TouchableOpacity onPress={() => alertFinishWorkout()} className="pl-4 py-4">
                             <Text className="text-blue-500 font-pbold">Finish</Text>
                         </TouchableOpacity>
 
+                        {/* debug button */}
                         {/* <TouchableOpacity onPress={() => console.log(workoutDetails)}>
                             <Text className="text-white">Show Button</Text>
                         </TouchableOpacity> */}

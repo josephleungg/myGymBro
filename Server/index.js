@@ -390,10 +390,12 @@ app.delete('/delete_meal', verifyJWT, async (req, res) => {
 // WORKOUT SESSION ROUTES
 // Route for finishing the user's workout session
 app.patch('/finish_workout', verifyJWT, async (req, res) => {
-    // body must contain the workout session data { workout: array containing the workout info }
+    // body must contain the workout session data { workout: array containing the workout info, duration: number }
     try {
+        let workoutDetails = req.body.workout
+        workoutDetails[2] = req.body.duration
         // Updating daysAtGym array with the workout session
-        const updateDaysAtGym = await User.findByIdAndUpdate(req.id, { $push: { daysAtGym: req.body.workout } })
+        const updateDaysAtGym = await User.findByIdAndUpdate(req.id, { $push: { daysAtGym: workoutDetails } })
 
         // Clearing the current workout array
         const clearCurrentWorkout = await User.findByIdAndUpdate(req.id, { $set: { currentWorkout: [] } })
