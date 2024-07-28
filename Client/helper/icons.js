@@ -10,6 +10,7 @@ import dumbbell from "../assets/trackers-imgs/dumbbell.png";
 import other from "../assets/trackers-imgs/other.png";
 import play from "../assets/icons/play.png";
 import pause from "../assets/icons/pause.png";
+import star from "../assets/icons/star.png";
 
 export default {
     home,
@@ -24,4 +25,5 @@ export default {
     other,
     play,
     pause,
+    star,
 };
