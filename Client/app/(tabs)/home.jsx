@@ -35,7 +35,6 @@ export default function Home () {
           <TouchableOpacity className="flex-1 bg-secondary py-5 mr-4 rounded-3xl items-center" onPress={() => console.log("Meals List Works")}>
             <Text className="text-primar text-base font-psemibold">Food Tracker</Text>
           </TouchableOpacity>
-
         </View>
 
         {/* Displaying workouts that the user has saved */}
