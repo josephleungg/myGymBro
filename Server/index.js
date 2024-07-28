@@ -409,9 +409,9 @@ app.patch('/finish_workout', verifyJWT, async (req, res) => {
                 // if the user has done the exercise before
                 // check if the user has progressed
                 // update the user's set weight for the charts
-                updateUserExercises.pastSetWeight = [...updateUserExercises.pastSetWeight, req.body.workout[i]["weight"]]
-                updateUserExercises.pastSetReps = [...updateUserExercises.pastSetReps, req.body.workout[i]["sets"]]
-                updateUserExercises.pastDates = [...updateUserExercises.pastDates, req.body.workout[i]["date"]]
+                updateUserExercises.pastSetWeight = [...updateUserExercises.pastSetWeight, ...req.body.workout[i]["weight"].flat()]
+                updateUserExercises.pastSetReps = [...updateUserExercises.pastSetReps, ...req.body.workout[i]["sets"].flat()]
+                updateUserExercises.pastDates = [...updateUserExercises.pastDates, ...req.body.workout[i]["date"].flat()]
 
                 // update user's PR
                 if(maxWeightInSets > updateUserExercises.personalRecord){
@@ -426,9 +426,9 @@ app.patch('/finish_workout', verifyJWT, async (req, res) => {
                 const newUserExercise = {
                     userID: req.id,
                     exerciseID: req.body.workout[i]["id"],
-                    pastSetWeight: [req.body.workout[i]["weight"]],
-                    pastSetReps: [req.body.workout[i]["sets"]],
-                    pastDates: [req.body.workout[i]["date"]],
+                    pastSetWeight: req.body.workout[i]["weight"],
+                    pastSetReps: req.body.workout[i]["sets"],
+                    pastDates: req.body.workout[i]["date"],
                     personalRecord: Math.max(...req.body.workout[i]["weight"]),
                     personalRecordDate: req.body.workout[i]["date"][0]
                 }

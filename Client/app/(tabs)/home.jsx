@@ -23,7 +23,7 @@ export default function Home () {
 
         {/* Welcome text */}
         <View className='mx-6 mt-12 mb-8'>
-          <Text className='text-white font-pregular text-base'>Welcome <Text className="font-pbold">{properties.name}</Text></Text>
+          <Text className='text-gray-100 font-pregular text-lg'>Welcome <Text className="text-white font-pbold">{properties.name}</Text></Text>
         </View>
 
         {/* buttons at the top */}
@@ -46,6 +46,7 @@ export default function Home () {
             <Text className="text-white font-psemibold text-base">Start Your First Workout!</Text>
           </View>
         :
+        // Displaying the last 4 workouts
         properties.daysAtGym.slice(0,4).map((workout, index) => {
           // constants for displaying workout info
           const workoutDate = new Date(workout[3]);
@@ -57,7 +58,7 @@ export default function Home () {
             <View key={index} className="flex-col pb-16">
               {/* 1st row */}
               <View className="flex-row">
-                <Text className="text-white font-psemibold text-lg flex-1">{workout[0] === "" ? "No Name Workout" : workout[0]}</Text>
+                <Text className="text-white font-psemibold text-lg flex-1">{workout[0] === "" ? "Untitled Workout" : workout[0]}</Text>
                 
               </View>
 
@@ -68,17 +69,19 @@ export default function Home () {
               </View>
               
               {/* more details */}
-              <TouchableOpacity className="items-center pt-6" onPress={() => console.log("More details works")}>
-                <Text className="text-white font-psemibold">More Details</Text>
+              <TouchableOpacity className="items-center pt-6" onPress={() => router.push({ pathname: "/workouts/[id]", params: { workout: JSON.stringify(workout) }})}>
+                <Text className="text-secondary font-psemibold">More Details</Text>
               </TouchableOpacity>
             </View>
           );
           })}
 
           {properties.daysAtGym.length > 0 && (
-            <TouchableOpacity className="self-center bg-[#e2e2f7] py-3 px-4 rounded-3xl" onPress={() => router.push('/trackers')}>
-              <Text className="text-black font-psemibold text-base">View More</Text>
-            </TouchableOpacity>
+            <View className="pb-16">
+              <TouchableOpacity className="self-center bg-[#e2e2f7] py-3 px-4 rounded-3xl" onPress={() => router.push('/trackers')}>
+                <Text className="text-black font-psemibold text-base">View More</Text>
+              </TouchableOpacity>
+            </View>
           )}
         </View>
 

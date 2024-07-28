@@ -7,7 +7,7 @@ import { IP_ADDRESS } from '@env';
 import pfp from '../../assets/icon.png'
 
 export default function Profile() {
-  const { user, username, email, properties, dateCreated, isLoggedIn, setIsLoggedIn, isUpdated, setIsUpdated } = useGlobalContext();
+  const { user, username, email, properties, dateCreated, isLoggedIn, setIsLoggedIn, isUpdated, setIsUpdated, resetTimer, setWorkoutStarted, setSavedWorkoutDetails } = useGlobalContext();
 
   // function to logout the user on profile tab
   const logout = async () => {
@@ -17,6 +17,11 @@ export default function Profile() {
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
+
+      // Reset global context
+      resetTimer()
+      setWorkoutStarted(false)
+      setSavedWorkoutDetails(["", "", 0, new Date()])
       setIsLoggedIn(false);
       router.replace('/sign-in');
     } catch (e) {
@@ -26,7 +31,7 @@ export default function Profile() {
 
   // function to edit profile
   const editSubmit = async () => {
-    router.replace('/editprofile')
+    router.push('/editprofile')
   }
 
   // function to get user id from the server for testing
@@ -67,8 +72,8 @@ export default function Profile() {
             className="w-[100px] h-[100px] rounded-full self-center"
           />
 
-          <Text className='text-white pb-2 pt-2'>{username}</Text>
-          <Text className='text-white pb-10'>Joined in {getMonthName(dateCreated.month)} {dateCreated.year}</Text>
+          <Text className='text-white font-psemibold pb-2 pt-2'>{username}</Text>
+          <Text className='text-white font-pregular pb-10'>Joined in {getMonthName(dateCreated.month)} {dateCreated.year}</Text>
           
           {/* profile buttons */}
           <View className='pb-3'>
@@ -108,8 +113,6 @@ export default function Profile() {
             {/* <Text className="text-white text-lg font-psemibold text-center">Calendar Coming Soon...</Text> */}
             <CustomCalendar />
           </View>
-
-          <Button onPress={() => bttnTest()} title="go to test" />
 
         </View>
 

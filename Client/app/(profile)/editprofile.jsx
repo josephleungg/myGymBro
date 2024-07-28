@@ -16,11 +16,11 @@ export default function EditProfile() {
     const cleanedProperties = cleanProperties()
     updateProfile(cleanedProperties);
     setProperties(resetProperties(cleanedProperties))
-    router.replace('/profile')
+    router.back()
   }
 
   const cancelSubmit = () => {
-    router.replace('/profile')
+    router.back()
   }
 
   // clean properties object before submitting to backend

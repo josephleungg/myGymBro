@@ -87,7 +87,9 @@ export default function ExercisePage() {
                     const userExerciseData = await res.json()
 
                     if(userExerciseData.pastSetWeight.length > 4){
-                        setUserExerciseStats({"pastSetWeight": userExerciseData.pastSetWeight.slice(0, 4), "pastSetReps": userExerciseData.pastSetReps.slice(0, 4), "pastDates": userExerciseData.pastDates.slice(0, 4)})
+                        setUserExerciseStats({"pastSetWeight": userExerciseData.pastSetWeight.slice(userExerciseData.pastSetWeight.length - 4), "pastSetReps": userExerciseData.pastSetReps.slice(userExerciseData.pastSetReps.length - 4), "pastDates": userExerciseData.pastDates.slice(userExerciseData.pastDates.length - 4)})
+                    }else{
+                        setUserExerciseStats({"pastSetWeight": userExerciseData.pastSetWeight, "pastSetReps": userExerciseData.pastSetReps, "pastDates": userExerciseData.pastDates})
                     }
                 }
 
@@ -123,7 +125,7 @@ export default function ExercisePage() {
                 </View>
                 {/* header */}
                 <View className="items-center">
-                    <Text className="text-white font-psemibold text-lg">{exerciseData.name}</Text>
+                    <Text className="text-secondary font-psemibold text-lg">{exerciseData.name}</Text>
                     <Text className="text-gray-100 font-pregular">{exerciseData.creatorName}</Text>
                 </View>
             
@@ -158,19 +160,22 @@ export default function ExercisePage() {
 
                 {/* previous workout data */}
                 <View className="pt-8">
-                    <Text className="font-psemibold text-white">Previous Workout Sets</Text>
+                    <Text className="font-psemibold text-base text-white">Previous Workout Sets</Text>
 
-                    {/* Checker for if the  */}
+                    {/* Checker for if the user has done the exercise and show the previous sets */}
                     {userExerciseStats.pastSetWeight.length === 0 ? (
                         <View className="pt-4 w-full items-center">
                             <Text className="text-white font-pregular">You haven't done this exercise before :c</Text>
                         </View>
                     ) : (
                         userExerciseStats.pastSetWeight.map((weight, i) => {
-                            <View className="pt-4 flex-row justify-end">
-                                <Text className="text-white font-pregular">{userExerciseStats.pastSetReps[i]} @ {userExerciseStats.pastSetWeight[i]} LBS</Text>
-                                <Text className="text-gray-100 font-pregular">{userExerciseStats.pastDates[i]}</Text>
+                            const workoutDate = new Date(userExerciseStats.pastDates[i])
+                            return(
+                            <View key={i} className="pt-4 flex-row">
+                                <Text className="text-white font-pregular flex-1">{userExerciseStats.pastSetReps[i]} Reps @ {userExerciseStats.pastSetWeight[i]} LBS</Text>
+                                <Text className="text-gray-100 font-pregular">{workoutDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</Text>
                             </View>
+                            )
                         })
                     )
                     }
@@ -195,6 +200,11 @@ export default function ExercisePage() {
                         </TouchableOpacity>
                     </View>
                 )}
+                
+                {/* button for debugging */}
+                {/* <TouchableOpacity className="bg-blue-500 px-4 py-2 rounded-3xl" onPress={() => console.log(userExerciseStats)}>
+                    <Text className="text-black font-pmedium">Test</Text>
+                </TouchableOpacity> */}
 
             </ScrollView>
         </SafeAreaView>
