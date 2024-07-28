@@ -28,11 +28,12 @@ Express.js
 - General Tabs
 - User Authentication
 - Profile Tab (incl. Editing Profile)
+- Fitness Tracker
+- Custom User Exercise/Meal
 
 ### Work in progress
 
-- Fitness/Meal Tracker
-- Allow users to delete their own exercise/meal
+- Meal Tracker
 - AI Workout/Meal Plan Generator
 - AI Camera Exercise form checker
 - More Features coming soon...
