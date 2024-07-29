@@ -153,7 +153,7 @@ export default function WorkoutTracker() {
                 <ScrollView className="h-full pb-4 px-6">
                     {/* back button */}
                     <View className="flex-row">
-                        <TouchableOpacity onPress={() => router.navigate("/home")} className="flex-1 pr-4 py-4">
+                        <TouchableOpacity onPress={() => router.back()} className="flex-1 pr-4 py-4">
                             <Image 
                                 className="h-4 w-6"
                                 source={images.backArrow}

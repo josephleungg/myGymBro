@@ -84,9 +84,10 @@ export default function WorkoutPage() {
                     })}
                 </View>
 
-                <TouchableOpacity className="bg-secondary py-5 ml-4 rounded-3xl items-center" onPress={() => console.log(workoutArray)}>
+                {/* Debugging */}
+                {/* <TouchableOpacity className="bg-secondary py-5 ml-4 rounded-3xl items-center" onPress={() => console.log(workoutArray)}>
                     <Text className="text-primary text-base font-psemibold">Show workout</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
             </ScrollView>
         </SafeAreaView>

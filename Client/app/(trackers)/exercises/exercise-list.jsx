@@ -52,44 +52,45 @@ export default function ExerciseList() {
 
       {/* header with plus button */}
       <View className="mt-4 px-6 items-center">
-      <View className="flex-row justify-between items-center w-full mb-4">
-        {/* left spacer */}
-        <View className="flex-1">
-          <TouchableOpacity onPress={() => router.back()}>
-            <Image 
-              className="h-4 w-6"
-              source={images.backArrow}
-            />
+        <View className="flex-row justify-between items-center w-full mb-4">
+          {/* left spacer */}
+          <View className="flex-1">
+            <TouchableOpacity onPress={() => router.back()}>
+              <Image 
+                className="h-4 w-6"
+                source={images.backArrow}
+              />
+            </TouchableOpacity>
+          </View> 
+
+          <View className="items-center flex-1">
+            <Text className="text-white text-lg font-pregular">Exercise List</Text>
+          </View>
+          
+          <TouchableOpacity className="flex-1 items-end" onPress={() => router.push('/exercises/create-exercise')}>
+            <Text className="text-white text-xl">+</Text>
           </TouchableOpacity>
-        </View> 
+        </View>
+          
+          {/* search bar */}
+          <TextInput
+            className="w-full h-12 px-4 mb-4 bg-black-100 rounded-2xl text-white font-psemibold"
+            placeholder="Search exercises..."
+            placeholderTextColor="#999"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
 
-        <Text className="text-white text-lg font-pregular flex-1 items-center">Exercise List</Text>
+          {/* Filter buttons
+          <View className="mb-4 w-full flex-row space-x-6">
+            <TouchableOpacity className="bg-secondary py-5 rounded-3xl items-center flex-1" onPress={() => console.log("works")}>
+              <Text className="text-black text-md font-psemibold">Equipment</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity className="flex-1 items-end" onPress={() => router.push('/exercises/create-exercise')}>
-          <Text className="text-white text-xl">+</Text>
-        </TouchableOpacity>
-      </View>
-        
-        {/* search bar */}
-        <TextInput
-          className="w-full h-12 px-4 mb-4 bg-black-100 rounded-2xl text-white font-psemibold"
-          placeholder="Search exercises..."
-          placeholderTextColor="#999"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-      </View>
-
-      {/* filter buttons */}
-      <View className="flex-row w-full space-x-4 justify-between">
-        
-        {/* <TouchableOpacity className="flex-1 bg-[#2e2e48] py-5 ml-4 rounded-3xl items-center" onPress={() => console.log("works")}>
-          <Text className="text-white text-md font-psemibold">Equipment</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity className="flex-1 bg-[#2e2e48] py-5 mr-4 rounded-3xl items-center" onPress={() => console.log("works 2")}>
-          <Text className="text-white text-md font-psemibold">Meals List</Text>
-        </TouchableOpacity> */}
+            <TouchableOpacity className="bg-secondary py-5 rounded-3xl items-center flex-1" onPress={() => console.log("works")}>
+              <Text className="text-black text-md font-psemibold">Muscles</Text>
+            </TouchableOpacity>
+          </View> */}
       </View>
 
       {/* main section showing all exercises */}

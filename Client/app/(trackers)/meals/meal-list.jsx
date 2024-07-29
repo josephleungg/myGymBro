@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { IP_ADDRESS } from '@env';
 import { useGlobalContext } from '../../../context/GlobalProvider.js';
 import icons from "../../../helper/icons.js"
+import images from "../../../helper/images.js"
 
 export default function MealList() {
   const [errorMessage, setErrorMessage] = useState('');
@@ -11,7 +12,7 @@ export default function MealList() {
   const [isLoading, setIsLoading] = useState(true); // Initialize loading state
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredMeals, setFilteredMeals] = useState([]);
-  const {mealRefresh, setMealRefresh} = useGlobalContext();
+  const {mealsRefresh, setMealsRefresh} = useGlobalContext();
 
   // fetching meals data on load
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function MealList() {
       }
     }
     fetchedData();
-  }, [mealRefresh])
+  }, [mealsRefresh])
 
   // Filter meals whenever the search query changes
   useEffect(() => {
@@ -50,16 +51,26 @@ export default function MealList() {
 
       {/* header with plus button */}
       <View className="mt-4 px-6 items-center">
-      <View className="flex-row justify-between items-center w-full mb-4">
-        {/* left spacer */}
-        <View className="flex-1" /> 
+        <View className="flex-row justify-between items-center w-full mb-4">
+          {/* left spacer */}
+          <View className="flex-1">
+            <TouchableOpacity onPress={() => router.back()}>
+              <Image 
+                className="h-4 w-6"
+                source={images.backArrow}
+              />
+            </TouchableOpacity>
+          </View> 
 
-        <Text className="text-white text-lg font-pregular flex-1">Meal List</Text>
+          <View className="items-center flex-1">
+            <Text className="text-white text-lg font-pregular">Meal List</Text>
+          </View>
+          
 
-        <TouchableOpacity className="flex-1 items-end" onPress={() => router.push('/meals/create-meal')}>
-          <Text className="text-white text-xl">+</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity className="flex-1 items-end" onPress={() => router.push('/meals/create-meal')}>
+            <Text className="text-white text-xl">+</Text>
+          </TouchableOpacity>
+        </View>
         
         {/* search bar */}
         <TextInput

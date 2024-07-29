@@ -45,12 +45,14 @@ export default function Trackers() {
           </TouchableOpacity>
         </View>
 
-        <View className="pt-16">
+        <View className="pt-10">
+          {(showWorkouts && properties.daysAtGym.length > 0) && 
+            <Text className="text-gray-100 font-psemibold text-base pb-6">{properties.daysAtGym.length} Workouts Completed</Text>}
           {showWorkouts ? 
             (properties.daysAtGym.length === 0 
               ? 
                 <View>
-                  <Text className="text-white font-psemibold text-base">Start Your First Workout!</Text>
+                  <Text className="text-white font-psemibold text-base">No Previous Workouts Found!</Text>
                 </View>
               :
               // Displaying the last 4 workouts

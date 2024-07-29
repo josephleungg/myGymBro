@@ -1,10 +1,11 @@
-import { Image, View, Text } from 'react-native'
-import { Tabs, Redirect } from 'expo-router'
+import { Image, View, Text, TouchableOpacity } from 'react-native'
+import { Tabs, Redirect, router } from 'expo-router'
 import icons from '../../helper/icons.js'
 import { StatusBar } from 'expo-status-bar'
+import { useGlobalContext } from '../../context/GlobalProvider.js'
 
 export default function TabsLayout() {
-
+  const {workoutStarted, elapsedTime} = useGlobalContext();
   const TabIcon = ({ icon, color, name, focused}) => {
     return (
       <View className='items-center justify-center gap-2'>
@@ -23,8 +24,18 @@ export default function TabsLayout() {
 
   return (
     <>
+      
       <Tabs
         screenOptions={{
+        headerShown: workoutStarted,
+          headerStyle: {
+            backgroundColor: '#212133',
+          },
+          headerTitle: () => (
+              <TouchableOpacity onPress={() => router.push('/workouts/workout-tracker')}>
+                <Text className="font-psemibold text-base text-secondary">Workout in progress: <Text className="font-pregular text-base text-white">{Math.floor(elapsedTime / 1000)}</Text></Text>
+              </TouchableOpacity>
+          ),
           tabBarShowLabel: false,
           tabBarActiveTintColor: '#FFA001',
           tabBarInactiveTintColor: '#CDCDE0',
@@ -33,7 +44,7 @@ export default function TabsLayout() {
             borderTopWidth: 1,
             borderTopColor: '#232533',
             height: 90,
-          }
+          },
         }}
       >
 
@@ -42,7 +53,6 @@ export default function TabsLayout() {
           name="home"
           options={{
             title: 'Home',
-            headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon={icons.home}
@@ -59,7 +69,6 @@ export default function TabsLayout() {
           name="trackers"
           options={{
             title: 'Trackers',
-            headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon={icons.trackers}
@@ -76,7 +85,6 @@ export default function TabsLayout() {
           name="ai"
           options={{
             title: 'AI',
-            headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon={icons.ai}
@@ -93,7 +101,6 @@ export default function TabsLayout() {
           name="profile"
           options={{
             title: 'Profile',
-            headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon={icons.profile}
