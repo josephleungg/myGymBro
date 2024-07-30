@@ -18,7 +18,7 @@ export default function Trackers() {
 
   function isSelectedMeals() {
     if(showWorkouts === null) {
-      setShowWorkouts(true);
+      setShowWorkouts(false);
     } else if (showWorkouts === true) {
       setShowWorkouts(false);
     }
@@ -45,10 +45,16 @@ export default function Trackers() {
           </TouchableOpacity>
         </View>
 
+        {/* Displaying workouts or meals that the user has saved */}
         <View className="pt-10">
           {(showWorkouts && properties.daysAtGym.length > 0) && 
             <Text className="text-gray-100 font-psemibold text-base pb-6">{properties.daysAtGym.length} Workouts Completed</Text>}
-          {showWorkouts ? 
+
+          {((showWorkouts === false) && properties.mealDays.length > 0) && 
+            <Text className="text-gray-100 font-psemibold text-base pb-6">Meals</Text>}
+          
+          {/* dusplaying the user's previous workouts */}
+          {showWorkouts ?
             (properties.daysAtGym.length === 0 
               ? 
                 <View>
@@ -84,12 +90,19 @@ export default function Trackers() {
                   </View>
                 );
             }))
-          : 
+          :
+          // Displaying the user's meals
           showWorkouts === false ?
-            <View className="">
-              <Text className="text-white font-psemibold text-lg">Meals</Text>
-              <Text className="text-gray-100 font-pregular text-base">Your meal history</Text>
-            </View>
+            (properties.mealDays.length === 0 
+              ? 
+              <View className="">
+                <Text className="text-gray-100 font-pregular text-base">No Meals Found</Text>
+              </View>
+              :
+              <View className="">
+                <Text className="text-gray-100 font-pregular text-base">No Meals Found</Text>
+              </View>
+            )
           :
             <></>
           }
