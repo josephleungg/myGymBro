@@ -17,6 +17,10 @@ export default function Home () {
     router.push('/workouts/workout-tracker')
   }
 
+  function trackMeals() {
+    router.push('/meals/meal-track')
+  }
+
   return (
     <SafeAreaView className="bg-primary">
       <ScrollView className="h-full">
@@ -32,7 +36,7 @@ export default function Home () {
             <Text className="text-primary text-base font-psemibold">Start Workout</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity className="flex-1 bg-secondary py-5 mr-4 rounded-3xl items-center" onPress={() => console.log("Meals List Works")}>
+          <TouchableOpacity className="flex-1 bg-secondary py-5 mr-4 rounded-3xl items-center" onPress={() => trackMeals()}>
             <Text className="text-primar text-base font-psemibold">Food Tracker</Text>
           </TouchableOpacity>
         </View>

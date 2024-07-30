@@ -161,7 +161,7 @@ export default function ExercisePage() {
                 {/* previous workout data */}
                 <View className="pt-8">
                     <Text className="font-psemibold text-base text-white">Previous Workout Sets</Text>
-
+                    
                     {/* Checker for if the user has done the exercise and show the previous sets */}
                     {userExerciseStats.pastSetWeight.length === 0 ? (
                         <View className="pt-4 w-full items-center">
@@ -205,7 +205,6 @@ export default function ExercisePage() {
                 {/* <TouchableOpacity className="bg-blue-500 px-4 py-2 rounded-3xl" onPress={() => console.log(userExerciseStats)}>
                     <Text className="text-black font-pmedium">Test</Text>
                 </TouchableOpacity> */}
-
             </ScrollView>
         </SafeAreaView>
         )
