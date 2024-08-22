@@ -75,6 +75,7 @@ export default function SignIn() {
               isLoading={isSubmitting}
             />
 
+            {/* testing button */}
             {/* <Button title="Check IP Address in ENV" onPress={() => console.log(IP_ADDRESS)} /> */}
 
             {/* sign up for an account text */}

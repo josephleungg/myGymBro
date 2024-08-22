@@ -2,10 +2,10 @@ import { View, Text, TouchableOpacity, SafeAreaView, ScrollView, Touchable } fro
 import { useGlobalContext } from '../../context/GlobalProvider.js';
 import { router } from 'expo-router'
 import { IP_ADDRESS } from '@env';
-import React from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Home () {
-  const { properties, workoutStarted, setWorkoutStarted, startTimer } = useGlobalContext();
+  const { properties, workoutStarted, setWorkoutStarted, startTimer, isLoggedIn, setIsLoggedIn } = useGlobalContext();
 
   // go to workout tracker
   function startWorkout() {
@@ -19,6 +19,16 @@ export default function Home () {
 
   function trackMeals() {
     router.push('/meals/meal-track')
+  }
+
+  if (!isLoggedIn || !properties) {
+      return (
+          <SafeAreaView className="bg-primary flex-1 justify-center items-center">
+              <Text>
+                Loading...
+              </Text>
+          </SafeAreaView>
+      );
   }
 
   return (
@@ -43,7 +53,7 @@ export default function Home () {
 
         {/* Displaying workouts that the user has saved */}
         <View className="px-6">
-        {properties.daysAtGym.length === 0 
+        {properties.daysAtGym && properties.daysAtGym.length === 0
         ? 
           <View>
             <Text className="text-white font-psemibold text-base">Start Your First Workout!</Text>

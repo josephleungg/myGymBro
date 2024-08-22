@@ -8,10 +8,10 @@ import CustomButton from '../components/custombutton.jsx'
 import { useGlobalContext } from '../context/GlobalProvider.js';
 
 export default function App() {
-  const { isLoading, isLoggedIn } = useGlobalContext();
+  const { isLoading, isLoggedIn, properties } = useGlobalContext();
 
   // if user is logged in with verifiable jwt, redirect to home page
-  if(!isLoading && isLoggedIn){
+  if(!isLoading && isLoggedIn && properties){
     return <Redirect href='/home'/>
   }
 
